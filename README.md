@@ -1,4 +1,4 @@
-#SPK Pemilihan Laptop Bekas (SMART)
+# SPK Pemilihan Laptop Bekas (SMART)
 
 Sistem Pendukung Keputusan (SPK) berbasis web untuk membantu proses pemilihan laptop bekas menggunakan metode **SMART (Simple Multi Attribute Rating Technique)**.
 
