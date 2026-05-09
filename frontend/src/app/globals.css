@@ -19,6 +19,50 @@
   --font-montserrat: var(--font-montserrat);
 }
 
+@layer components {
+  .material-symbols-outlined {
+    font-feature-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  /* Typography */
+  .text-display {
+    @apply text-2xl font-bold;
+  }
+
+  .text-h1 {
+    @apply text-xl font-bold;
+  }
+
+  .text-body-base {
+    @apply text-base;
+  }
+
+  .text-body-sm {
+    @apply text-sm;
+  }
+
+  .text-label-caps {
+    @apply text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .text-data-tabular {
+    @apply text-base font-mono;
+  }
+
+  /* Utility Classes */
+  .container-max {
+    @apply max-w-7xl;
+  }
+
+  .sidebar-width {
+    width: 260px;
+  }
+}
+
 body {
   background-color: var(--background);
   font-family: var(--font-montserrat);
