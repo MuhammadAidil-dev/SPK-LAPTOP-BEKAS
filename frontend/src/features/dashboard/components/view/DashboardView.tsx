@@ -2,8 +2,8 @@
 
 import { dummyLaptops, dummyMetrics } from '@/constant/dummy/laptop.dummy';
 import { MetricCard } from '../card/MetricCard';
-import { LaptopTable } from '../ui/LaptopTable';
 import { Plus } from 'lucide-react';
+import { LaptopTable } from '@/components/ui/LaptopTable';
 
 export default function DashboardView() {
   const handleAddLaptop = () => {

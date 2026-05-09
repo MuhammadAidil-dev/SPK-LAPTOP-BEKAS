@@ -40,9 +40,12 @@ export function LaptopTable({ laptops, onEdit, onDelete }: LaptopTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-left border-collapse">
+      <table className="w-full border-collapse">
         <thead>
           <tr className="bg-surface-container-low bg-primary/10">
+            <th className="w-2.5 px-6 py-4 font-semibold text-sm text-center">
+              NO
+            </th>
             <th className="px-6 py-4 font-semibold text-sm text-center">
               Nama
             </th>
@@ -64,11 +67,14 @@ export function LaptopTable({ laptops, onEdit, onDelete }: LaptopTableProps) {
           </tr>
         </thead>
         <tbody className="">
-          {laptops.map((laptop) => (
+          {laptops.map((laptop, index) => (
             <tr
               key={laptop.id}
               className="hover:bg-secondary/10 transition-colors"
             >
+              <td className="px-6 py-4 text-xs font-semibold text-center text-primary">
+                {index + 1}
+              </td>
               <td className="px-6 py-4 text-xs font-semibold">{laptop.name}</td>
               <td className="px-6 py-4 text-xs font-semibold text-center">
                 {formatPrice(laptop.price)}
