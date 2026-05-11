@@ -11,7 +11,7 @@ export default function AdminLayout({
       <AdminSidebar />
       <div className="ml-62.5 p-4 relative">
         <AdminTopbar />
-        <main className="py-16 px-4">{children}</main>
+        <main className="py-24 px-4">{children}</main>
       </div>
     </>
   );

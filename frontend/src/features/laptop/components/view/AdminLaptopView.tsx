@@ -8,7 +8,7 @@ import { Plus, Wallet } from 'lucide-react';
 
 export default function AdminLaptopView() {
   return (
-    <div className="flex flex-col py-8">
+    <div className="flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
