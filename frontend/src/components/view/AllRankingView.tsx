@@ -14,7 +14,6 @@ import {
   Eye,
 } from 'lucide-react';
 import ButtonLink from '../ui/ButtonLink';
-import Button from '../ui/Button';
 
 type Laptop = {
   id: number;
@@ -24,14 +23,14 @@ type Laptop = {
   image: string;
   features?: string[];
 };
-
 const laptops: Laptop[] = [
   {
     id: 1,
     name: 'MacBook Pro M3',
     price: 28999000,
     score: 98,
-    image: '/images/laptop-1.jpg',
+    image:
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
     features: [
       'M3 Chip',
       '22 Jam Baterai',
@@ -44,28 +43,32 @@ const laptops: Laptop[] = [
     name: 'Dell XPS 15',
     price: 31500000,
     score: 92,
-    image: '/images/laptop-2.jpg',
+    image:
+      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 3,
     name: 'ThinkPad X1 Carbon',
     price: 26200000,
     score: 89,
-    image: '/images/laptop-3.jpg',
+    image:
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 4,
     name: 'ROG Zephyrus G14',
     price: 24500000,
     score: 85,
-    image: '/images/laptop-4.jpg',
+    image:
+      'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 5,
     name: 'HP Spectre x360',
     price: 22800000,
     score: 82,
-    image: '/images/laptop-5.jpg',
+    image:
+      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=1200&auto=format&fit=crop',
   },
 ];
 
@@ -207,9 +210,9 @@ export default function AllRankingView() {
 
                   <td className="px-4 py-3 flex justify-center items-center">
                     <div className="w-8">
-                      <Button>
+                      <ButtonLink href="/laptops/detail/1">
                         <Eye size={16} />
-                      </Button>
+                      </ButtonLink>
                     </div>
                   </td>
                 </tr>

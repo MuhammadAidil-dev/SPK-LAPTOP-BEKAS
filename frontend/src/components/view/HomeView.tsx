@@ -27,7 +27,8 @@ const laptops: Laptop[] = [
     age: 1,
     final_score: 0.945,
     rank: 1,
-    image: '/images/laptop-1.jpg',
+    image:
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
     highlight: 'Performa tinggi + sangat portable',
   },
   {
@@ -39,7 +40,8 @@ const laptops: Laptop[] = [
     age: 2,
     final_score: 0.892,
     rank: 2,
-    image: '/images/laptop-2.jpg',
+    image:
+      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=1200&auto=format&fit=crop',
   },
   {
     id: 3,
@@ -50,7 +52,8 @@ const laptops: Laptop[] = [
     age: 3,
     final_score: 0.856,
     rank: 3,
-    image: '/images/laptop-3.jpg',
+    image:
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
   },
 ];
 
@@ -60,7 +63,7 @@ export default function HomeView() {
   const others = sorted.slice(1);
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-24">
+    <div className="max-w-7xl mx-auto px-6 py-24">
       {/* HERO */}
       <section className="text-center max-w-2xl mx-auto mb-12">
         <h1 className="text-2xl font-semibold text-gray-900 mb-3">
@@ -166,6 +169,6 @@ export default function HomeView() {
           <ButtonLink href="/laptops/all">Lihat Semua Ranking</ButtonLink>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
