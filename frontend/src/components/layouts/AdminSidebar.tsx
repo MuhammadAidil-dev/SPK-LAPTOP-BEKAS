@@ -16,11 +16,24 @@ type NavItem = {
   label: string;
 };
 
+type linkItemsType = {
+  href: string;
+  label: string;
+};
+
 export const navItems: NavItem[] = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/laptops', icon: Laptop, label: 'Laptops' },
   { href: '/criteria', icon: SlidersHorizontal, label: 'Criteria' },
   { href: '/recomendations', icon: Award, label: 'Recomendations' },
+];
+
+export const linkItems: linkItemsType[] = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/laptops', label: 'Laptops' },
+  { href: '/criteria', label: 'Criteria' },
+  { href: '/recomendations', label: 'Recomendations' },
+  { href: '/criteria/add', label: 'Add Criteria' },
 ];
 
 export default function AdminSidebar() {

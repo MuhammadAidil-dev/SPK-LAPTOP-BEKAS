@@ -1,5 +1,5 @@
+import { ICriteria } from '@/types/criteria.type';
 import { Pencil, Trash2 } from 'lucide-react';
-import { ICriteria } from '../../types/criteria.type';
 
 type CriteriaTableProps = {
   criterion: ICriteria[];

@@ -1,6 +1,7 @@
-import Button from '@/components/ui/Button';
 import { CircleCheck, Plus } from 'lucide-react';
 import CriteriaTable from '../ui/CriteriaTable';
+
+import ButtonLink from '@/components/ui/ButtonLink';
 
 export default function AdminCriteriaView() {
   return (
@@ -17,10 +18,10 @@ export default function AdminCriteriaView() {
           </div>
 
           <div className="w-50">
-            <Button type="button">
+            <ButtonLink href={'/criteria/add'}>
               <Plus />
               <span>Add New Criterion</span>
-            </Button>
+            </ButtonLink>
           </div>
         </div>
 

@@ -1,14 +1,14 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { navItems } from './AdminSidebar';
+import { linkItems } from './AdminSidebar';
 import { Bell, CircleUser } from 'lucide-react';
 
 export default function AdminTopbar() {
   const pathname = usePathname();
   let label: string = '';
 
-  for (const data of navItems) {
+  for (const data of linkItems) {
     if (pathname == data.href) {
       label = data.label;
       break;
