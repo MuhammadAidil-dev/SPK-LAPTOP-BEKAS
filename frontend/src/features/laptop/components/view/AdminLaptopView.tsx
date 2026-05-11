@@ -1,7 +1,7 @@
 'use client';
 
 import SummaryCard from '@/components/card/SummaryCard';
-import Button from '@/components/ui/Button';
+import ButtonLink from '@/components/ui/ButtonLink';
 import { LaptopTable } from '@/components/ui/LaptopTable';
 import { dummyLaptops } from '@/constant/dummy/laptop.dummy';
 import { Plus, Wallet } from 'lucide-react';
@@ -18,10 +18,10 @@ export default function AdminLaptopView() {
           </p>
         </div>
         <div className="w-50">
-          <Button type="button">
+          <ButtonLink href="/laptops/add">
             <Plus className="w-4 h-4" />
             Add New Laptop
-          </Button>
+          </ButtonLink>
         </div>
       </div>
 

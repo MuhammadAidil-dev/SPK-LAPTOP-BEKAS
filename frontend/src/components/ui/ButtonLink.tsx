@@ -8,7 +8,7 @@ type ButtonProps = {
 
 const buttonColor = {
   primary: 'bg-primary hover:bg-hover',
-  secondary: 'bg-secondary',
+  secondary: 'bg-secondary hover:bg-secondary/80',
 };
 
 export default function ButtonLink({

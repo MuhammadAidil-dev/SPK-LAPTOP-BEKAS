@@ -1,5 +1,6 @@
 import { Laptop } from '@/types/dashboard.type';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Eye, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 
 interface LaptopTableProps {
   laptops: Laptop[];
@@ -97,20 +98,26 @@ export function LaptopTable({ laptops, onEdit, onDelete }: LaptopTableProps) {
                 {laptop.age} {laptop.age === 1 ? 'Year' : 'Years'}
               </td>
               <td className="px-6 py-4">
-                <div className="flex items-center gap-3 justify-center">
-                  <button
+                <div className="flex items-center gap-6 justify-center">
+                  <Link
+                    href={'/laptops/edit/1'}
                     onClick={() => onEdit?.(laptop.id)}
                     className="text-primary hover:underline text-xs font-semibold text-center"
                   >
                     <Edit2 className="w-4 h-4 inline mr-1" />
-                    Edit
-                  </button>
+                  </Link>
+                  <Link
+                    href={'/laptops/1'}
+                    onClick={() => onEdit?.(laptop.id)}
+                    className="text-secondary hover:underline text-xs font-semibold text-center"
+                  >
+                    <Eye className="w-4 h-4 inline mr-1" />
+                  </Link>
                   <button
                     onClick={() => onDelete?.(laptop.id)}
-                    className="text-error hover:underline text-xs font-semibold text-center"
+                    className="text-red-500 hover:underline text-xs font-semibold text-center cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4 inline mr-1" />
-                    Delete
                   </button>
                 </div>
               </td>

@@ -1,8 +1,23 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { linkItems } from './AdminSidebar';
 import { Bell, CircleUser } from 'lucide-react';
+
+type linkItemsType = {
+  href: string;
+  label: string;
+};
+
+export const linkItems: linkItemsType[] = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/laptops', label: 'Laptops' },
+  { href: '/criteria', label: 'Criteria' },
+  { href: '/recomendations', label: 'Recomendations' },
+  { href: '/criteria/add', label: 'Add Criteria' },
+  { href: '/criteria/edit', label: 'Edit Criteria' },
+  { href: '/laptops/add', label: 'Add Laptop' },
+  { href: '/laptops/edit', label: 'Edit Laptop' },
+];
 
 export default function AdminTopbar() {
   const pathname = usePathname();
