@@ -1,11 +1,12 @@
 'use client';
 
+import Button from '@/components/ui/Button';
+import { CriteriaDTO, CriteriaType } from '@/types/criteria.type';
+import { useState } from 'react';
+import { dummyCriteria } from '../ui/CriteriaTable';
 import Breadcrumbs, {
   breadcrumbItemsType,
 } from '@/components/navigations/Breadcrumb';
-import Button from '@/components/ui/Button';
-import { CriteriaDTO } from '@/types/criteria.type';
-import { useState } from 'react';
 
 const breadcrumItems: breadcrumbItemsType[] = [
   {
@@ -13,16 +14,18 @@ const breadcrumItems: breadcrumbItemsType[] = [
     href: '/criteria',
   },
   {
-    label: 'Add Criteria',
+    label: 'Edit Criteria',
   },
 ];
 
-export default function CriteriaAddView() {
+export default function CriteriaEditView() {
+  const criteria = dummyCriteria.find((data) => data.id === 1);
+
   const [form, setForm] = useState<CriteriaDTO>({
-    name: '',
-    description: '',
-    weight: 0.45,
-    type: 'benefit',
+    name: criteria!.name,
+    description: criteria!.desc,
+    weight: Number(criteria!.weight),
+    type: criteria!.type as CriteriaType,
   });
 
   const handleChange = (key: keyof CriteriaDTO, value: string | number) => {
@@ -39,6 +42,10 @@ export default function CriteriaAddView() {
     console.log('SUBMIT CRITERIA:', form);
   };
 
+  if (!criteria) {
+    return <div className="">Tidak ada kriteria yang ditemukan</div>;
+  }
+
   return (
     <div className="max-w-3xl mx-auto flex flex-col items-center">
       {/* Breadcrumb */}
@@ -48,7 +55,7 @@ export default function CriteriaAddView() {
       <div className="w-full bg-white border border-secondary/10 rounded-xl shadow-sm overflow-hidden">
         {/* Header */}
         <div className="p-6 border-b bg-primary/10">
-          <h2 className="text-lg font-semibold">Add Criteria</h2>
+          <h2 className="text-lg font-semibold">Edit Criteria</h2>
           <p className="text-sm text-gray-500 mt-1">
             Define SMART attributes for decision model.
           </p>
@@ -178,7 +185,7 @@ export default function CriteriaAddView() {
               <Button type="button" color="secondary">
                 Cancel
               </Button>
-              <Button type="submit">Save Criteria</Button>
+              <Button type="submit">Edit Criteria</Button>
             </div>
           </div>
         </form>
