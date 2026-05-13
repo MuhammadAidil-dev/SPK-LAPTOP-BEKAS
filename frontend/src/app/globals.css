@@ -1,26 +1,69 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --primary: #10b981;
+  --hover: #007b52;
+  --secondary: #64748b;
+  --tertiary: #fc7c78;
+  --neutral: #717973;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-hover: var(--hover);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-neutral: var(--neutral);
+  --font-montserrat: var(--font-montserrat);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .material-symbols-outlined {
+    font-feature-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24;
+  }
+
+  /* Typography */
+  .text-display {
+    @apply text-2xl font-bold;
+  }
+
+  .text-h1 {
+    @apply text-xl font-bold;
+  }
+
+  .text-body-base {
+    @apply text-base;
+  }
+
+  .text-body-sm {
+    @apply text-sm;
+  }
+
+  .text-label-caps {
+    @apply text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .text-data-tabular {
+    @apply text-base font-mono;
+  }
+
+  /* Utility Classes */
+  .container-max {
+    @apply max-w-7xl;
+  }
+
+  .sidebar-width {
+    width: 260px;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  font-family: var(--font-montserrat);
 }
