@@ -8,8 +8,8 @@
     "build": "tsc && tsc-alias",
     "seed": "tsx --env-file=.env.dev src/scripts/seed.ts",
     "lint": "eslint src/**/*.ts",
-    "seed:admin": "ts-node -r tsconfig-paths/register src/seeders/auth/auth.seeder.ts seed",
-    "seed:admin:clear": "ts-node -r tsconfig-paths/register src/seeders/auth/auth.seeder.ts clear"
+    "seed:admin": "ts-node -r tsconfig-paths/register src/seeders/user.seeder.ts seed",
+    "seed:admin:clear": "ts-node -r tsconfig-paths/register src/seeders/user.seeder.ts clear"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "joi": "^17.13.3",
+    "joi": "^18.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",
     "multer": "^2.1.1",

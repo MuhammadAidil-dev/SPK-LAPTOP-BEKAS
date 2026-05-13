@@ -24,11 +24,9 @@ export const loadEnv = () => {
     PORT: port,
     MONGO_URI: getEnv('MONGO_URI'),
     URL: getEnv('URL'),
-    SECRET_KEY: getEnv('SECRET_KEY'),
-    SECRET_KEY_REFRESH_TOKEN: getEnv('SECRET_KEY_REFRESH_TOKEN'),
+    JWT_SECRET_KEY: getEnv('JWT_SECRET_KEY'),
+    JWT_REFRESH_TOKEN_KEY: getEnv('JWT_REFRESH_TOKEN_KEY'),
     JWT_EXPIRES_IN: getEnv('JWT_EXPIRES_IN'),
     CLIENT_URL: getEnv('CLIENT_URL'),
-    FONNTE_TOKEN: getEnv('FONNTE_TOKEN'),
-    FONNTE_API_URL: getEnv('FONNTE_API_URL'),
   };
 };

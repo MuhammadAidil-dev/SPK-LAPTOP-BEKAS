@@ -4,6 +4,9 @@ import path from 'path';
 import cors from 'cors';
 import { errorMiddleware } from './middleware/errorMiddleware';
 import { loadEnv } from './config/env';
+import auhtRouter from './modules/auth/auth.route';
+import { AppError } from './common/error/appError';
+import { ERROR_CODE, HTTP_CODE } from './common/error/http';
 
 const env = loadEnv();
 
@@ -23,18 +26,18 @@ app.use(
 // app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // route
-// app.use('/api/v1/auth', auhtRouter);
+app.use('/api/v1/auth', auhtRouter);
 
 // not found error
-// app.use((_req, _res, next) => {
-//   next(
-//     new AppError(
-//       'Route not found',
-//       HTTP_CODE.NOT_FOUND,
-//       ERROR_CODE.INTERNAL_SERVER,
-//     ),
-//   );
-// });
+app.use((_req, _res, next) => {
+  next(
+    new AppError(
+      'Route not found',
+      HTTP_CODE.NOT_FOUND,
+      ERROR_CODE.INTERNAL_SERVER,
+    ),
+  );
+});
 
 // global error middleware
 app.use(errorMiddleware);
