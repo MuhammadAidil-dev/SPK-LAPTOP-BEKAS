@@ -1,4 +1,4 @@
-import { HTTP_CODE } from '@/common/error/http';
+import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
 import { Request, Response, NextFunction } from 'express';
 import { ObjectSchema } from 'joi';
 
@@ -28,6 +28,7 @@ export const validate = (schema: ObjectSchema) => {
       res.status(HTTP_CODE.BAD_REQUEST).json({
         success: false,
         message: 'Validasi gagal',
+        code: ERROR_CODE.BAD_REQUEST,
         errors,
       });
       return;

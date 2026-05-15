@@ -7,6 +7,7 @@ import { loadEnv } from './config/env';
 import auhtRouter from './modules/auth/auth.route';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
+import criteriaRouter from './modules/criteria/criteria.route';
 
 const env = loadEnv();
 
@@ -27,6 +28,7 @@ app.use(
 
 // route
 app.use('/api/v1/auth', auhtRouter);
+app.use('/api/v1/criteria', criteriaRouter);
 
 // not found error
 app.use((_req, _res, next) => {

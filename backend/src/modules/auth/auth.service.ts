@@ -18,12 +18,12 @@ class AuthService {
   private readonly JWT_EXPIRED_IN: SignOptions['expiresIn'];
 
   constructor() {
-    if (!env.JWT_SECRET_KEY) {
+    if (!env.JWT.SECRET) {
       throw Error('JWT Secret tidak ditemukan di env variable');
     }
 
-    this.JWT_SECRET = env.JWT_SECRET_KEY;
-    this.JWT_EXPIRED_IN = (env.JWT_EXPIRES_IN ??
+    this.JWT_SECRET = env.JWT.SECRET;
+    this.JWT_EXPIRED_IN = (env.JWT.EXPIRES_IN ??
       '8h') as SignOptions['expiresIn'];
   }
 

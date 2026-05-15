@@ -1,13 +1,15 @@
 import dotenv from 'dotenv';
 
-const nodeEnv = process.env.NODE_ENV || 'development';
-dotenv.config({ path: `.env.${nodeEnv}` });
+dotenv.config(); // load default .env
 
-const getEnv = (param: string): string => {
-  const value = process.env[param];
-  if (!value) {
+const nodeEnv = process.env.NODE_ENV || 'development';
+dotenv.config({ path: `.env.${nodeEnv}`, override: false });
+
+const getEnv = (key: string): string => {
+  const value = process.env[key];
+  if (value === undefined || value === '') {
     throw new Error(
-      `Environment variable ${param} is required to run the server`,
+      `Environment variable ${key} is required to run the server`,
     );
   }
   return value.trim();
@@ -15,8 +17,8 @@ const getEnv = (param: string): string => {
 
 export const loadEnv = () => {
   const port = Number(getEnv('PORT'));
-  if (Number.isNaN(port)) {
-    throw new Error('Environment variable PORT must be a valid number');
+  if (!Number.isInteger(port)) {
+    throw new Error('PORT must be a valid integer');
   }
 
   return {
@@ -24,9 +26,13 @@ export const loadEnv = () => {
     PORT: port,
     MONGO_URI: getEnv('MONGO_URI'),
     URL: getEnv('URL'),
-    JWT_SECRET_KEY: getEnv('JWT_SECRET_KEY'),
-    JWT_REFRESH_TOKEN_KEY: getEnv('JWT_REFRESH_TOKEN_KEY'),
-    JWT_EXPIRES_IN: getEnv('JWT_EXPIRES_IN'),
+
+    JWT: {
+      SECRET: getEnv('JWT_SECRET_KEY'),
+      REFRESH_SECRET: getEnv('JWT_REFRESH_TOKEN_KEY'),
+      EXPIRES_IN: getEnv('JWT_EXPIRES_IN'),
+    },
+
     CLIENT_URL: getEnv('CLIENT_URL'),
   };
 };
