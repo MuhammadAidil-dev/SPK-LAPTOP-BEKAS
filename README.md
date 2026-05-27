@@ -217,15 +217,165 @@ layer structure (controller, service, repository)
 ```txt
 backend/
 ├── src/
-│   ├── common/
-│   │   ├── error/
-│   │   ├── middleware/
-│   │   └── utils/
+│
+│   ├── app.ts
+│   │   # Entry point aplikasi Express.
+│   │   # Bertugas menginisialisasi middleware global,
+│   │   # routing utama, koneksi database, dan bootstrap server.
+│
 │   ├── config/
-│   │   └── env.ts
+│   │   ├── env.ts
+│   │   │   # Loader dan validator environment variables.
+│   │   │   # Menyimpan konfigurasi seperti:
+│   │   │   # PORT, DATABASE_URL, JWT_SECRET, dll.
+│   │   │
+│   │   ├── database.ts
+│   │   │   # Konfigurasi koneksi database.
+│   │   │   # Contoh: MongoDB connection, pooling, transaction setup.
+│   │   │
+│   │   └── logger.ts
+│   │       # Konfigurasi logging aplikasi.
+│   │       # Digunakan untuk logging request, error, dan activity system.
+│
+│   ├── common/
+│   │   # Shared layer yang dapat digunakan seluruh module.
+│   │
+│   │   ├── error/
+│   │   │   ├── AppError.ts
+│   │   │   │   # Base custom error untuk standardisasi error aplikasi.
+│   │   │   │
+│   │   │   ├── error-handler.ts
+│   │   │   │   # Global error handling middleware Express.
+│   │   │   │
+│   │   │   └── error-code.ts
+│   │   │       # Kumpulan kode error agar konsisten di seluruh sistem.
+│   │   │
+│   │   ├── middleware/
+│   │   │   ├── auth.middleware.ts
+│   │   │   │   # Middleware autentikasi JWT/session.
+│   │   │   │
+│   │   │   ├── role.middleware.ts
+│   │   │   │   # Middleware authorization berbasis role.
+│   │   │   │
+│   │   │   ├── validation.middleware.ts
+│   │   │   │   # Middleware validasi request body/query/params.
+│   │   │   │
+│   │   │   └── request-logger.middleware.ts
+│   │   │       # Middleware logging request API.
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── response.ts
+│   │   │   │   # Helper standard response API.
+│   │   │   │
+│   │   │   ├── pagination.ts
+│   │   │   │   # Utility pagination untuk query list data.
+│   │   │   │
+│   │   │   ├── date.ts
+│   │   │   │   # Helper manipulasi dan formatting tanggal.
+│   │   │   │
+│   │   │   └── hash.ts
+│   │   │       # Utility hashing password/token.
+│   │   │
+│   │   ├── constants/
+│   │   │   # Konstanta global aplikasi.
+│   │   │
+│   │   └── types/
+│   │       # Shared TypeScript types/interfaces.
+│
 │   ├── modules/
-│   │   ├── */**
-│   └── app.ts
+│   │   # Setiap business domain dipisahkan menjadi module independen.
+│   │   # Contoh: auth, user, member, subscription, payment, attendance.
+│   │
+│   │   ├── auth/
+│   │   │   ├── controller/
+│   │   │   │   └── auth.controller.ts
+│   │   │   │       # Layer HTTP handling.
+│   │   │   │       # Bertugas menerima request dan mengirim response.
+│   │   │   │       # Tidak berisi business logic.
+│   │   │   │
+│   │   │   ├── service/
+│   │   │   │   └── auth.service.ts
+│   │   │   │       # Business logic layer.
+│   │   │   │       # Mengatur flow login, register, token validation, dll.
+│   │   │   │
+│   │   │   ├── repository/
+│   │   │   │   └── auth.repository.ts
+│   │   │   │       # Data access layer.
+│   │   │   │       # Bertugas berinteraksi langsung dengan database.
+│   │   │   │
+│   │   │   ├── dto/
+│   │   │   │   └── login.dto.ts
+│   │   │   │       # Data Transfer Object untuk validasi payload request.
+│   │   │   │
+│   │   │   ├── validation/
+│   │   │   │   └── auth.validation.ts
+│   │   │   │       # Schema validasi request.
+│   │   │   │
+│   │   │   ├── routes/
+│   │   │   │   └── auth.route.ts
+│   │   │   │       # Routing endpoint module auth.
+│   │   │   │
+│   │   │   ├── types/
+│   │   │   │   # Type/interface khusus module auth.
+│   │   │   │
+│   │   │   └── index.ts
+│   │   │       # Export module auth.
+│   │   │
+│   │   ├── user/
+│   │   │   ├── controller/
+│   │   │   ├── service/
+│   │   │   ├── repository/
+│   │   │   ├── dto/
+│   │   │   ├── validation/
+│   │   │   ├── routes/
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── member/
+│   │   │   ├── controller/
+│   │   │   ├── service/
+│   │   │   ├── repository/
+│   │   │   ├── dto/
+│   │   │   ├── validation/
+│   │   │   ├── routes/
+│   │   │   └── index.ts
+│   │   │
+│   │   └── ...
+│   │
+│   ├── routes/
+│   │   └── index.ts
+│   │       # Registrasi seluruh route module ke aplikasi utama.
+│   │
+│   ├── database/
+│   │   ├── models/
+│   │   │   # Schema/model database.
+│   │   │
+│   │   ├── migrations/
+│   │   │   # File migration database.
+│   │   │
+│   │   └── seeders/
+│   │       # Seeder data awal aplikasi.
+│   │
+│   └── tests/
+│       ├── unit/
+│       │   # Unit testing service dan utility.
+│       │
+│       ├── integration/
+│       │   # Integration testing API/database.
+│       │
+│       └── e2e/
+│           # End-to-end testing flow aplikasi.
+│
+├── .env
+│   # Environment variables.
+│
+├── package.json
+│   # Dependency dan script project.
+│
+├── tsconfig.json
+│   # Konfigurasi TypeScript.
+│
+└── README.md
+    # Dokumentasi project backend.
 ```
 
 ---
