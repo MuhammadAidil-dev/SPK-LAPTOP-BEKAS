@@ -9,4 +9,6 @@ export type LoginResponse = {
 export const authService = {
   login: (data: LoginDTO) =>
     publicApi.post<LoginResponse>('/auth/login', data),
+
+  logout: () => publicApi.post<null>('/auth/logout'),
 };

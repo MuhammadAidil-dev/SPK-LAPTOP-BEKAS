@@ -1,7 +1,9 @@
 'use client';
 
+import { logoutAction } from '@/features/auth/actions/auth.action';
 import { usePathname } from 'next/navigation';
-import { Bell, CircleUser } from 'lucide-react';
+import { Bell, CircleUser, LogOut } from 'lucide-react';
+import { useTransition } from 'react';
 
 type linkItemsType = {
   href: string;
@@ -21,14 +23,21 @@ export const linkItems: linkItemsType[] = [
 
 export default function AdminTopbar() {
   const pathname = usePathname();
-  let label: string = '';
+  const [isPending, startTransition] = useTransition();
 
+  let label: string = '';
   for (const data of linkItems) {
-    if (pathname == data.href) {
+    if (pathname === data.href) {
       label = data.label;
       break;
     }
   }
+
+  const handleLogout = () => {
+    startTransition(async () => {
+      await logoutAction();
+    });
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 py-4 px-8 bg-white shadow-sm border-b border-secondary/10 ml-62.5">
@@ -38,12 +47,21 @@ export default function AdminTopbar() {
           <span className="cursor-pointer hover:text-primary">
             <Bell size={20} />
           </span>
-          <div className="cursor-pointer flex items-center gap-2 border border-secondary rounded-md p-2 hover:text-primary hover:border-primary">
-            <span>
-              <CircleUser size={20} />
-            </span>
-            <p className="font-semibold text-xs hover:text-primary">ADMIN</p>
+
+          <div className="flex items-center gap-2 border border-secondary rounded-md p-2">
+            <CircleUser size={20} />
+            <p className="font-semibold text-xs">ADMIN</p>
           </div>
+
+          <button
+            onClick={handleLogout}
+            disabled={isPending}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition disabled:opacity-50 cursor-pointer"
+            title="Logout"
+          >
+            <LogOut size={18} />
+            <span className="font-medium">{isPending ? '...' : 'Logout'}</span>
+          </button>
         </div>
       </nav>
     </header>

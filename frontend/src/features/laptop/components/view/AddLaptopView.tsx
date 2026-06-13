@@ -255,6 +255,16 @@ export default function AddLaptopView() {
                   </span>
                 </label>
 
+                {/* Single always-in-DOM input — preserves selected file across re-renders */}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+
                 {imagePreview ? (
                   <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-gray-50">
                     <Image
@@ -262,6 +272,7 @@ export default function AddLaptopView() {
                       alt="Preview"
                       fill
                       className="object-contain"
+                      unoptimized
                     />
                     <button
                       type="button"
@@ -272,31 +283,15 @@ export default function AddLaptopView() {
                     </button>
                   </div>
                 ) : (
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition">
+                  <div
+                    onClick={() => fileRef.current?.click()}
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition"
+                  >
                     <ImagePlus size={24} className="text-gray-400 mb-2" />
                     <span className="text-sm text-gray-400">
                       Klik untuk upload gambar
                     </span>
-                    <input
-                      ref={fileRef}
-                      type="file"
-                      name="image"
-                      accept="image/jpeg,image/png,image/webp"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                  </label>
-                )}
-                {/* keep file input in DOM even when preview shown so FormData captures it */}
-                {imagePreview && (
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    name="image"
-                    accept="image/jpeg,image/png,image/webp"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
+                  </div>
                 )}
               </div>
 

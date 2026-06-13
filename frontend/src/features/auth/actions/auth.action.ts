@@ -36,3 +36,12 @@ export async function loginAction(
 
   redirect('/dashboard');
 }
+
+export async function logoutAction(): Promise<void> {
+  await authService.logout();
+
+  const cookieStore = await cookies();
+  cookieStore.delete('accessToken');
+
+  redirect('/auth/login');
+}

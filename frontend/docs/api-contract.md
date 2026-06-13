@@ -10,6 +10,7 @@
 Semua endpoint menggunakan envelope yang sama.
 
 ### Success
+
 ```json
 {
   "success": true,
@@ -20,6 +21,7 @@ Semua endpoint menggunakan envelope yang sama.
 ```
 
 ### Error
+
 ```json
 {
   "success": false,
@@ -30,6 +32,7 @@ Semua endpoint menggunakan envelope yang sama.
 ```
 
 ### Validation Error (422)
+
 ```json
 {
   "success": false,
@@ -45,17 +48,17 @@ Semua endpoint menggunakan envelope yang sama.
 
 ## Error Codes
 
-| Code | HTTP | Keterangan |
-|---|---|---|
-| `VALIDATION_ERROR` | 422 | Field tidak lolos validasi — lihat `errors` object |
-| `BAD_REQUEST` | 400 | Request tidak valid |
-| `UNAUTHORIZED` | 401 | Tidak ada token / token tidak ditemukan |
-| `TOKEN_EXPIRED` | 401 | Token sudah kadaluarsa |
-| `INVALID_TOKEN` | 401 | Token tidak valid / rusak |
-| `FORBIDDEN` | 403 | Tidak punya akses (role tidak sesuai) |
-| `NOT_FOUND` | 404 | Resource tidak ditemukan |
-| `DUPLICATE_KEY` | 409 | Data duplikat |
-| `INTERNAL_ERROR` | 500 | Server error |
+| Code               | HTTP | Keterangan                                         |
+| ------------------ | ---- | -------------------------------------------------- |
+| `VALIDATION_ERROR` | 422  | Field tidak lolos validasi — lihat `errors` object |
+| `BAD_REQUEST`      | 400  | Request tidak valid                                |
+| `UNAUTHORIZED`     | 401  | Tidak ada token / token tidak ditemukan            |
+| `TOKEN_EXPIRED`    | 401  | Token sudah kadaluarsa                             |
+| `INVALID_TOKEN`    | 401  | Token tidak valid / rusak                          |
+| `FORBIDDEN`        | 403  | Tidak punya akses (role tidak sesuai)              |
+| `NOT_FOUND`        | 404  | Resource tidak ditemukan                           |
+| `DUPLICATE_KEY`    | 409  | Data duplikat                                      |
+| `INTERNAL_ERROR`   | 500  | Server error                                       |
 
 ---
 
@@ -66,6 +69,7 @@ Endpoint yang membutuhkan autentikasi wajib menyertakan token via salah satu car
 ```
 Authorization: Bearer <accessToken>
 ```
+
 atau cookie `accessToken` (set otomatis setelah login).
 
 ---
@@ -80,6 +84,7 @@ Login admin. Set cookie `accessToken` (httpOnly, 8 jam).
 **Content-Type:** `application/json`
 
 **Request Body:**
+
 ```json
 {
   "email": "admin@laptopinhil.com",
@@ -87,12 +92,13 @@ Login admin. Set cookie `accessToken` (httpOnly, 8 jam).
 }
 ```
 
-| Field | Type | Validasi |
-|---|---|---|
-| `email` | string | required, min 3, max 100 |
-| `password` | string | required, min 8, max 72 |
+| Field      | Type   | Validasi                 |
+| ---------- | ------ | ------------------------ |
+| `email`    | string | required, min 3, max 100 |
+| `password` | string | required, min 8, max 72  |
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -117,6 +123,25 @@ Login admin. Set cookie `accessToken` (httpOnly, 8 jam).
 
 ---
 
+### POST `/auth/logout`
+
+Logout. Clear cookie `accessToken`.
+
+**Access:** Public (tidak perlu token)
+
+**Response 200:**
+
+```json
+{
+  "success": true,
+  "message": "Berhasil logout",
+  "data": null,
+  "meta": null
+}
+```
+
+---
+
 ## Modul: Criteria
 
 ### GET `/criteria`
@@ -126,6 +151,7 @@ Ambil semua kriteria.
 **Access:** Public
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -155,6 +181,7 @@ Tambah kriteria baru. Total weight semua kriteria tidak boleh melebihi 1.0.
 **Content-Type:** `application/json`
 
 **Request Body:**
+
 ```json
 {
   "name": "harga",
@@ -163,13 +190,14 @@ Tambah kriteria baru. Total weight semua kriteria tidak boleh melebihi 1.0.
 }
 ```
 
-| Field | Type | Validasi |
-|---|---|---|
-| `name` | string | required, min 3 |
-| `type` | string | required, enum: `benefit` \| `cost` |
-| `weight` | number | required, min 0, max 1 |
+| Field    | Type   | Validasi                            |
+| -------- | ------ | ----------------------------------- |
+| `name`   | string | required, min 3                     |
+| `type`   | string | required, enum: `benefit` \| `cost` |
+| `weight` | number | required, min 0, max 1              |
 
 **Response 201:**
+
 ```json
 {
   "success": true,
@@ -204,6 +232,7 @@ Update kriteria. Semua field opsional.
 **Content-Type:** `application/json`
 
 **Request Body (semua opsional):**
+
 ```json
 {
   "name": "harga",
@@ -214,6 +243,7 @@ Update kriteria. Semua field opsional.
 ```
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -239,6 +269,7 @@ Hapus kriteria.
 **Access:** Admin only
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -264,6 +295,7 @@ Ambil semua laptop (aktif + non-aktif).
 **Access:** Public
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -318,22 +350,23 @@ Tambah laptop baru. Gambar opsional.
 
 **Form Fields:**
 
-| Field | Type | Validasi |
-|---|---|---|
-| `name` | string | required, min 3 |
-| `brand` | string | required |
-| `price` | number | required, min 0 (IDR) |
-| `processor_score` | number | required, min 0 (CPU PassMark benchmark) |
-| `gpu_score` | number | required, min 0 (GPU benchmark) |
-| `ram` | number | required, min 0 (GB) |
-| `storage` | number | required, min 0 (GB) |
-| `condition` | integer | required, 1–5 |
-| `age_months` | integer | required, min 0 |
-| `screen_size` | number | required, min 0 (inci) |
-| `battery_life` | number | required, min 0 (jam) |
-| `image` | file | opsional, JPEG/PNG/WebP, max 5MB |
+| Field             | Type    | Validasi                                 |
+| ----------------- | ------- | ---------------------------------------- |
+| `name`            | string  | required, min 3                          |
+| `brand`           | string  | required                                 |
+| `price`           | number  | required, min 0 (IDR)                    |
+| `processor_score` | number  | required, min 0 (CPU PassMark benchmark) |
+| `gpu_score`       | number  | required, min 0 (GPU benchmark)          |
+| `ram`             | number  | required, min 0 (GB)                     |
+| `storage`         | number  | required, min 0 (GB)                     |
+| `condition`       | integer | required, 1–5                            |
+| `age_months`      | integer | required, min 0                          |
+| `screen_size`     | number  | required, min 0 (inci)                   |
+| `battery_life`    | number  | required, min 0 (jam)                    |
+| `image`           | file    | opsional, JPEG/PNG/WebP, max 5MB         |
 
 **Response 201:**
+
 ```json
 {
   "success": true,
@@ -377,23 +410,24 @@ Update laptop. Semua field opsional. Kirim `image` file hanya jika ingin menggan
 
 **Form Fields (semua opsional):**
 
-| Field | Type | Keterangan |
-|---|---|---|
-| `name` | string | min 3 |
-| `brand` | string | |
-| `price` | number | min 0 |
-| `processor_score` | number | min 0 |
-| `gpu_score` | number | min 0 |
-| `ram` | number | min 0 |
-| `storage` | number | min 0 |
-| `condition` | integer | 1–5 |
-| `age_months` | integer | min 0 |
-| `screen_size` | number | min 0 |
-| `battery_life` | number | min 0 |
-| `isActive` | boolean | |
-| `image` | file | JPEG/PNG/WebP, max 5MB — jika tidak dikirim, gambar lama tetap |
+| Field             | Type    | Keterangan                                                     |
+| ----------------- | ------- | -------------------------------------------------------------- |
+| `name`            | string  | min 3                                                          |
+| `brand`           | string  |                                                                |
+| `price`           | number  | min 0                                                          |
+| `processor_score` | number  | min 0                                                          |
+| `gpu_score`       | number  | min 0                                                          |
+| `ram`             | number  | min 0                                                          |
+| `storage`         | number  | min 0                                                          |
+| `condition`       | integer | 1–5                                                            |
+| `age_months`      | integer | min 0                                                          |
+| `screen_size`     | number  | min 0                                                          |
+| `battery_life`    | number  | min 0                                                          |
+| `isActive`        | boolean |                                                                |
+| `image`           | file    | JPEG/PNG/WebP, max 5MB — jika tidak dikirim, gambar lama tetap |
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -419,6 +453,7 @@ Hapus laptop.
 **Access:** Admin only
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -444,6 +479,7 @@ Jalankan perhitungan SMART dan kembalikan ranking laptop.
 **Access:** Public
 
 **Cara kerja:**
+
 1. Ambil kriteria aktif dari DB
 2. Normalisasi bobot agar total = 1
 3. Hitung utility tiap laptop per kriteria:
@@ -455,6 +491,7 @@ Jalankan perhitungan SMART dan kembalikan ranking laptop.
 5. Urutkan descending
 
 **Response 200:**
+
 ```json
 {
   "success": true,
@@ -526,11 +563,12 @@ Upload gambar secara terpisah (opsional — biasanya gambar langsung dikirim lew
 
 **Form Fields:**
 
-| Field | Type | Validasi |
-|---|---|---|
+| Field   | Type | Validasi                         |
+| ------- | ---- | -------------------------------- |
 | `image` | file | required, JPEG/PNG/WebP, max 5MB |
 
 **Response 201:**
+
 ```json
 {
   "success": true,
@@ -565,10 +603,10 @@ Contoh: `http://localhost:5000/uploads/1234567890-abc.jpg`
 
 Sumber benchmark untuk mengisi `processor_score` dan `gpu_score`:
 
-| Kriteria | Sumber |
-|---|---|
-| `processor_score` | [cpubenchmark.net](https://www.cpubenchmark.net) — PassMark score |
-| `gpu_score` | [videocardbenchmark.net](https://www.videocardbenchmark.net) — PassMark score |
+| Kriteria          | Sumber                                                                        |
+| ----------------- | ----------------------------------------------------------------------------- |
+| `processor_score` | [cpubenchmark.net](https://www.cpubenchmark.net) — PassMark score             |
+| `gpu_score`       | [videocardbenchmark.net](https://www.videocardbenchmark.net) — PassMark score |
 
 Contoh nilai:
 | Processor | Score |
@@ -577,8 +615,8 @@ Contoh nilai:
 | AMD Ryzen 7 5800H | ~16200 |
 | Intel Core i5-11400H | ~12500 |
 
-| GPU | Score |
-|---|---|
+| GPU             | Score  |
+| --------------- | ------ |
 | RTX 3070 Laptop | ~11000 |
-| RTX 3060 Laptop | ~9500 |
-| GTX 1650 | ~5500 |
+| RTX 3060 Laptop | ~9500  |
+| GTX 1650        | ~5500  |

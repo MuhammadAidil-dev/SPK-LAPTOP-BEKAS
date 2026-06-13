@@ -220,6 +220,16 @@ export default function LaptopEditView({ laptop }: Props) {
                   </span>
                 </label>
 
+                {/* Single always-in-DOM input — preserves selected file across re-renders */}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+
                 {hasImage ? (
                   <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-gray-50">
                     <Image
@@ -227,24 +237,20 @@ export default function LaptopEditView({ laptop }: Props) {
                       alt="Preview"
                       fill
                       className="object-contain"
-                      unoptimized={imagePreview?.startsWith('blob:')}
+                      unoptimized={
+                        typeof imagePreview === 'string' &&
+                        imagePreview.startsWith('blob:')
+                      }
                     />
 
                     <div className="absolute top-2 right-2 flex gap-2">
-                      {/* Tombol ganti */}
-                      <label className="bg-white border border-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-gray-50 shadow-sm">
+                      <button
+                        type="button"
+                        onClick={() => fileRef.current?.click()}
+                        className="bg-white border border-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-gray-50 shadow-sm"
+                      >
                         Ganti
-                        <input
-                          ref={fileRef}
-                          type="file"
-                          name="image"
-                          accept="image/jpeg,image/png,image/webp"
-                          onChange={handleImageChange}
-                          className="hidden"
-                        />
-                      </label>
-
-                      {/* Tombol hapus */}
+                      </button>
                       <button
                         type="button"
                         onClick={clearImage}
@@ -254,7 +260,6 @@ export default function LaptopEditView({ laptop }: Props) {
                       </button>
                     </div>
 
-                    {/* Badge: gambar lama vs baru */}
                     <span className="absolute bottom-2 left-2 text-xs bg-black/50 text-white px-2 py-0.5 rounded-full">
                       {typeof imagePreview === 'string' &&
                       imagePreview.startsWith('blob:')
@@ -263,23 +268,17 @@ export default function LaptopEditView({ laptop }: Props) {
                     </span>
                   </div>
                 ) : (
-                  /* Tidak ada gambar / user hapus */
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition">
+                  <div
+                    onClick={() => fileRef.current?.click()}
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition"
+                  >
                     <ImagePlus size={24} className="text-gray-400 mb-2" />
                     <span className="text-sm text-gray-400">
                       {laptop.image
                         ? 'Gambar dihapus — klik untuk upload baru'
                         : 'Klik untuk upload gambar'}
                     </span>
-                    <input
-                      ref={fileRef}
-                      type="file"
-                      name="image"
-                      accept="image/jpeg,image/png,image/webp"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                  </label>
+                  </div>
                 )}
               </div>
 
