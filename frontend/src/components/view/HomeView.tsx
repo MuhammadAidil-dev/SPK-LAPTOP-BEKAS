@@ -39,7 +39,11 @@ function getCriteriaIcon(name: string) {
   return <BarChart3 size={18} className="text-primary" />;
 }
 
-export default function HomeView({ rankings, totalLaptops, totalCriteria }: Props) {
+export default function HomeView({
+  rankings,
+  totalLaptops,
+  totalCriteria,
+}: Props) {
   const [top1, ...others] = [...rankings].sort((a, b) => a.rank - b.rank);
 
   if (!top1) {
@@ -53,7 +57,7 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
   return (
     <div className="w-full">
       {/* ── HERO ── */}
-      <section className="bg-gradient-to-br from-primary/10 via-white to-white pt-24 pb-14 md:pt-28 md:pb-20">
+      <section className="bg-linear-to-br from-primary/10 via-white to-white pt-24 pb-14 md:pt-28 md:pb-20">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="space-y-5">
@@ -63,17 +67,19 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
               </span>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                Temukan Laptop{' '}
-                <span className="text-primary">Terbaik</span> untuk{' '}
-                Kebutuhan Anda
+                Temukan Laptop <span className="text-primary">Terbaik</span>{' '}
+                untuk Kebutuhan Anda
               </h1>
 
               <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg">
                 Sistem kami menganalisis{' '}
                 <strong className="text-gray-700">{totalLaptops} laptop</strong>{' '}
                 berdasarkan{' '}
-                <strong className="text-gray-700">{totalCriteria} kriteria</strong>{' '}
-                menggunakan metode SMART untuk memberikan rekomendasi yang objektif.
+                <strong className="text-gray-700">
+                  {totalCriteria} kriteria
+                </strong>{' '}
+                menggunakan metode SMART untuk memberikan rekomendasi yang
+                objektif.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -110,7 +116,7 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
                   </div>
                 )}
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <div className="flex items-center gap-2 mb-1">
                     <Trophy size={16} className="text-yellow-400" />
@@ -152,7 +158,9 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
                   {stat.value}
                   {stat.suffix}
                 </p>
-                <p className="text-xs md:text-sm text-gray-500 mt-1">{stat.label}</p>
+                <p className="text-xs md:text-sm text-gray-500 mt-1">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
@@ -351,7 +359,9 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
                   {item.icon}
                 </div>
                 <h4 className="font-semibold text-gray-900">{item.title}</h4>
-                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -363,7 +373,8 @@ export default function HomeView({ rankings, totalLaptops, totalCriteria }: Prop
             Masih bingung memilih?
           </h3>
           <p className="text-primary-foreground/80 text-sm md:text-base mb-6 max-w-lg mx-auto opacity-80">
-            Lihat seluruh daftar ranking laptop yang sudah dihitung oleh sistem SMART kami.
+            Lihat seluruh daftar ranking laptop yang sudah dihitung oleh sistem
+            SMART kami.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
