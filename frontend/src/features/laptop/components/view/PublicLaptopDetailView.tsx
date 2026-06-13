@@ -19,10 +19,10 @@ type Props = {
 
 export default function PublicLaptopDetailView({ laptop }: Props) {
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="max-w-6xl mx-auto px-4 md:px-6 pt-20 pb-10 md:pt-24 md:pb-12">
       <Breadcrumbs breadcrumItems={breadcrumbsItems} />
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-12">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-start lg:items-center mb-10 md:mb-12">
         <div className="relative aspect-video rounded-xl overflow-hidden border bg-gray-100">
           {laptop.image ? (
             <Image
@@ -39,23 +39,25 @@ export default function PublicLaptopDetailView({ laptop }: Props) {
           )}
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 md:gap-4">
           <p className="text-sm text-gray-500 font-medium">{laptop.brand}</p>
-          <h1 className="text-4xl font-semibold">{laptop.name}</h1>
-          <p className="text-green-600 text-2xl font-bold">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight">
+            {laptop.name}
+          </h1>
+          <p className="text-green-600 text-xl md:text-2xl font-bold">
             {formatCurrency(laptop.price)}
           </p>
         </div>
       </section>
 
       <section className="border border-secondary/10 shadow-sm rounded-md max-w-4xl mx-auto bg-primary/10">
-        <div className="p-6">
-          <h2 className="flex items-center gap-2 text-xl font-semibold mb-6">
+        <div className="p-5 md:p-6">
+          <h2 className="flex items-center gap-2 text-lg md:text-xl font-semibold mb-5 md:mb-6">
             <List size={20} />
             Spesifikasi Teknis
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <SpecItem label="RAM" value={`${laptop.ram} GB`} />
             <SpecItem label="Storage" value={`${laptop.storage} GB`} />
             <SpecItem label="Layar" value={`${laptop.screen_size}"`} />
@@ -79,7 +81,7 @@ export default function PublicLaptopDetailView({ laptop }: Props) {
 
 function SpecItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="p-4 border rounded-lg bg-white">
+    <div className="p-3 md:p-4 border rounded-lg bg-white">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="font-bold text-black">{value}</p>
     </div>
