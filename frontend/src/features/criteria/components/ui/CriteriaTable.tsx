@@ -1,44 +1,24 @@
+'use client';
+
 import { ICriteria } from '@/types/criteria.type';
 import { Pencil, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { useTransition } from 'react';
+import { deleteCriteriaAction } from '@/features/criteria/actions/criteria.action';
 
-type CriteriaTableProps = {
-  criterion: ICriteria[];
+type Props = {
+  criteria: ICriteria[];
 };
 
-export const dummyCriteria = [
-  {
-    id: 1,
-    name: 'Price',
-    desc: 'Base purchase price',
-    weight: '0.40',
-    type: 'cost',
-  },
-  {
-    id: 2,
-    name: 'Performance',
-    desc: 'CPU / RAM performance',
-    weight: '0.30',
-    type: 'benefit',
-  },
-  {
-    id: 3,
-    name: 'Condition',
-    desc: 'Physical & battery health',
-    weight: '0.20',
-    type: 'benefit',
-  },
+export default function CriteriaTable({ criteria }: Props) {
+  const [isPending, startTransition] = useTransition();
 
-  {
-    id: 4,
-    name: 'Age',
-    desc: 'Usage duration',
-    weight: '0.10',
-    type: 'cost',
-  },
-];
+  const handleDelete = (id: string) => {
+    startTransition(async () => {
+      await deleteCriteriaAction(id);
+    });
+  };
 
-export default function CriteriaTable() {
   return (
     <div className="lg:col-span-3 bg-white border rounded-xl overflow-hidden">
       <div className="p-6 border-b">
@@ -49,31 +29,44 @@ export default function CriteriaTable() {
         <thead className="bg-primary/10 text-xs text-secondary">
           <tr>
             <th className="px-6 py-4">CRITERIA</th>
-            <th className="px-6 py-4">DESCRIPTION</th>
+            <th className="px-6 py-4">TYPE</th>
             <th className="px-6 py-4">WEIGHT</th>
             <th className="px-6 py-4 text-right">ACTIONS</th>
           </tr>
         </thead>
 
         <tbody className="divide-y">
-          {dummyCriteria.map((item) => (
-            <tr key={item.name} className="hover:bg-gray-50">
+          {criteria.length === 0 && (
+            <tr>
+              <td colSpan={4} className="px-6 py-8 text-center text-gray-400">
+                Belum ada kriteria.
+              </td>
+            </tr>
+          )}
+          {criteria.map((item) => (
+            <tr key={item._id} className="hover:bg-gray-50">
               <td className="px-6 py-4 font-medium">{item.name}</td>
-              <td className="px-6 py-4 text-gray-500 text-sm">{item.desc}</td>
+              <td className="px-6 py-4 text-gray-500 text-sm capitalize">
+                {item.type}
+              </td>
               <td className="px-6 py-4">
                 <span className="px-3 py-1 bg-gray-100 rounded text-sm">
-                  {item.weight}
+                  {item.weight.toFixed(2)}
                 </span>
               </td>
               <td className="px-6 py-4 text-right">
                 <div className="flex justify-end gap-4">
                   <Link
-                    href={'/criteria/edit/1'}
+                    href={`/criteria/edit/${item._id}`}
                     className="p-2 hover:bg-green-100 rounded cursor-pointer"
                   >
                     <Pencil size={20} />
                   </Link>
-                  <button className="p-2 hover:bg-red-100 rounded cursor-pointer">
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    disabled={isPending}
+                    className="p-2 hover:bg-red-100 rounded cursor-pointer disabled:opacity-50"
+                  >
                     <Trash2 size={20} />
                   </button>
                 </div>

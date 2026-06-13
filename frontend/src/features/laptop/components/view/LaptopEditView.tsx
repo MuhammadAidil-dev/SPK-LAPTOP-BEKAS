@@ -1,187 +1,304 @@
 'use client';
 
+import { useActionState, useRef, useState } from 'react';
 import Breadcrumbs, {
   breadcrumbItemsType,
 } from '@/components/navigations/Breadcrumb';
-import Input from '@/components/ui/Input';
-import { dummyLaptops } from '@/constant/dummy/laptop.dummy';
-import { CircleCheck } from 'lucide-react';
-import { useState } from 'react';
-
-type LaptopForm = {
-  name: string;
-  price: number;
-  condition: 'new' | 'used' | 'refurbished';
-  age: number;
-  performance: number;
-};
+import { CircleCheck, ImagePlus, X } from 'lucide-react';
+import { ILaptop } from '@/types/laptop.type';
+import { updateLaptopAction } from '@/features/laptop/actions/laptop.action';
+import Image from 'next/image';
 
 const breadcrumbItems: breadcrumbItemsType[] = [
-  {
-    label: 'Laptop',
-    href: '/laptops',
-  },
-  {
-    label: 'Edit Laptop',
-  },
+  { label: 'Laptop', href: '/laptops' },
+  { label: 'Edit Laptop' },
 ];
 
-export default function LaptopEditView() {
-  const laptop = dummyLaptops[0];
+const conditionLabels = ['Buruk', 'Kurang', 'Cukup', 'Baik', 'Sempurna'];
 
-  const [form, setForm] = useState<LaptopForm>({
-    name: laptop.name,
-    price: laptop.price,
-    condition: 'refurbished',
-    age: laptop.age,
-    performance: laptop.performanceScore,
-  });
+type Props = {
+  laptop: ILaptop;
+};
 
-  const handleChange = (key: keyof LaptopForm, value: string | number) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+export default function LaptopEditView({ laptop }: Props) {
+  const updateWithId = updateLaptopAction.bind(null, laptop._id);
+  const [state, action, isPending] = useActionState(updateWithId, null);
+
+  const [condition, setCondition] = useState(laptop.condition);
+  // null  = pakai gambar lama (tidak ganti)
+  // false = user hapus gambar lama, tidak upload baru
+  // string = blob URL gambar baru yang dipilih
+  const [imagePreview, setImagePreview] = useState<string | null | false>(
+    laptop.image ?? false,
+  );
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (typeof imagePreview === 'string' && imagePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('SUBMIT DATA:', form);
+  const clearImage = () => {
+    if (typeof imagePreview === 'string' && imagePreview.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImagePreview(false);
+    if (fileRef.current) fileRef.current.value = '';
   };
 
-  if (!laptop) {
-    return <div className="">tidak ada data laptop</div>;
-  }
+  const hasImage = typeof imagePreview === 'string' && imagePreview.length > 0;
 
   return (
-    <div className="flex-1 bg-white">
+    <div className="flex-1">
       <div className="max-w-5xl">
-        {/* Breadcrumb */}
         <Breadcrumbs breadcrumItems={breadcrumbItems} />
 
-        {/* Header */}
         <div className="mb-6 flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-gray-900">
             Laptop Data Entry
           </h1>
-          <p className="text-gray-500">
-            Edit data Laptop untuk perhitungan SMART
-          </p>
+          <p className="text-gray-500">Edit data Laptop untuk perhitungan SMART</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* FORM */}
           <div className="lg:col-span-8 bg-white border border-secondary/10 shadow-sm rounded-xl p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* NAME */}
-
-              {/* <Input
-                type="text"
-                name="nameLaptop"
-                label="Nama Laptop"
-                placeholder="Laptop Asus"
-                value={form.name}
-                setValue={(e) => {}}
-              /> */}
-
-              <div>
-                <label className="block font-medium mb-1">Nama Laptop</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none"
-                  placeholder="MacBook Pro M3"
-                />
-              </div>
-
-              {/* PRICE + CONDITION */}
+            <form action={action} className="space-y-6">
+              {/* Name + Brand */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-medium mb-1">Harga (IDR)</label>
+                  <label className="block font-medium mb-1 text-sm">Nama Laptop</label>
                   <input
-                    type="number"
-                    value={form.price}
-                    onChange={(e) =>
-                      handleChange('price', Number(e.target.value))
-                    }
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none"
-                    placeholder="15000000"
+                    type="text"
+                    name="name"
+                    defaultValue={laptop.name}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
                 </div>
 
-                {/* <Input
-                  type="text"
-                  name="price"
-                  label="Harga "
-                  placeholder="5.000.000"
-                  value={form.price.toString()}
-                  setValue={(e) => {}}
-                /> */}
-
                 <div>
-                  <label className="block font-medium mb-1">Kondisi</label>
-                  <select
-                    value={form.condition}
-                    onChange={(e) => handleChange('condition', e.target.value)}
-                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none"
-                  >
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
-                    <option value="refurbished">Refurbished</option>
-                  </select>
+                  <label className="block font-medium mb-1 text-sm">Brand</label>
+                  <input
+                    type="text"
+                    name="brand"
+                    defaultValue={laptop.brand}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
                 </div>
               </div>
 
-              {/* AGE */}
+              {/* Price */}
               <div>
-                <label className="block font-medium mb-1">Usia (Tahun)</label>
+                <label className="block font-medium mb-1 text-sm">Harga (IDR)</label>
                 <input
                   type="number"
-                  value={form.age}
-                  onChange={(e) => handleChange('age', Number(e.target.value))}
-                  className="w-40 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none"
+                  name="price"
+                  defaultValue={laptop.price}
+                  className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                 />
               </div>
 
-              {/* PERFORMANCE */}
+              {/* Benchmark */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium mb-1 text-sm">
+                    Processor Score{' '}
+                    <span className="text-xs text-gray-400">(PassMark)</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="processor_score"
+                    defaultValue={laptop.processor_score}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1 text-sm">
+                    GPU Score{' '}
+                    <span className="text-xs text-gray-400">(PassMark)</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="gpu_score"
+                    defaultValue={laptop.gpu_score}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* RAM + Storage + Age + Screen */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block font-medium mb-1 text-sm">RAM (GB)</label>
+                  <input
+                    type="number"
+                    name="ram"
+                    defaultValue={laptop.ram}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1 text-sm">Storage (GB)</label>
+                  <input
+                    type="number"
+                    name="storage"
+                    defaultValue={laptop.storage}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1 text-sm">Usia (bulan)</label>
+                  <input
+                    type="number"
+                    name="age_months"
+                    defaultValue={laptop.age_months}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1 text-sm">Layar (inch)</label>
+                  <input
+                    type="number"
+                    name="screen_size"
+                    step="0.1"
+                    defaultValue={laptop.screen_size}
+                    className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Battery */}
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="font-medium">Performa</label>
-                  <span className="text-green-600 font-semibold">
-                    {form.performance}
-                  </span>
-                </div>
-
+                <label className="block font-medium mb-1 text-sm">Baterai (jam)</label>
                 <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  step={0.1}
-                  value={form.performance}
-                  onChange={(e) =>
-                    handleChange('performance', Number(e.target.value))
-                  }
-                  className="w-full text-primary"
+                  type="number"
+                  name="battery_life"
+                  step="0.5"
+                  defaultValue={laptop.battery_life}
+                  className="w-40 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                 />
+              </div>
 
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>1 (Low)</span>
-                  <span>5</span>
-                  <span>10 (High)</span>
+              {/* Condition — visual selector */}
+              <div>
+                <label className="block font-medium mb-2 text-sm">Kondisi Fisik</label>
+                <input type="hidden" name="condition" value={condition} />
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setCondition(v)}
+                      className={`flex-1 py-2 rounded-lg border text-sm font-semibold transition ${
+                        condition === v
+                          ? 'bg-primary text-white border-primary'
+                          : 'border-gray-200 text-gray-500 hover:border-primary/50'
+                      }`}
+                    >
+                      <span className="block text-lg">{v}</span>
+                      <span className="block text-xs font-normal">
+                        {conditionLabels[v - 1]}
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* ACTION */}
+              {/* Image — preview current or new */}
+              <div>
+                <label className="block font-medium mb-2 text-sm">
+                  Gambar{' '}
+                  <span className="text-xs text-gray-400 font-normal">
+                    (kosongkan = gambar lama tetap)
+                  </span>
+                </label>
+
+                {hasImage ? (
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-gray-50">
+                    <Image
+                      src={imagePreview as string}
+                      alt="Preview"
+                      fill
+                      className="object-contain"
+                      unoptimized={imagePreview?.startsWith('blob:')}
+                    />
+
+                    <div className="absolute top-2 right-2 flex gap-2">
+                      {/* Tombol ganti */}
+                      <label className="bg-white border border-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-gray-50 shadow-sm">
+                        Ganti
+                        <input
+                          ref={fileRef}
+                          type="file"
+                          name="image"
+                          accept="image/jpeg,image/png,image/webp"
+                          onChange={handleImageChange}
+                          className="hidden"
+                        />
+                      </label>
+
+                      {/* Tombol hapus */}
+                      <button
+                        type="button"
+                        onClick={clearImage}
+                        className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-sm"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+
+                    {/* Badge: gambar lama vs baru */}
+                    <span className="absolute bottom-2 left-2 text-xs bg-black/50 text-white px-2 py-0.5 rounded-full">
+                      {typeof imagePreview === 'string' &&
+                      imagePreview.startsWith('blob:')
+                        ? 'Gambar baru'
+                        : 'Gambar saat ini'}
+                    </span>
+                  </div>
+                ) : (
+                  /* Tidak ada gambar / user hapus */
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition">
+                    <ImagePlus size={24} className="text-gray-400 mb-2" />
+                    <span className="text-sm text-gray-400">
+                      {laptop.image
+                        ? 'Gambar dihapus — klik untuk upload baru'
+                        : 'Klik untuk upload gambar'}
+                    </span>
+                    <input
+                      ref={fileRef}
+                      type="file"
+                      name="image"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+
+              {state?.error && (
+                <p className="text-sm text-red-500 bg-red-50 px-4 py-2 rounded-lg">
+                  {state.error}
+                </p>
+              )}
+
               <div className="flex justify-end gap-3 pt-4 border-t">
-                <button type="button" className="px-4 py-2 border rounded-lg">
+                <button type="button" className="px-4 py-2 border rounded-lg text-sm">
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 text-white rounded-lg"
+                  disabled={isPending}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Save
+                  {isPending ? 'Menyimpan...' : 'Save'}
                 </button>
               </div>
             </form>
@@ -190,21 +307,27 @@ export default function LaptopEditView() {
           {/* SIDE PANEL */}
           <div className="lg:col-span-4 space-y-4">
             <div className="border border-secondary/10 shadow-sm rounded-xl p-4 bg-primary/10">
-              <h3 className="font-semibold mb-3 text-green-700">
+              <h3 className="font-semibold mb-3 text-sm text-green-700">
                 DSS Guidelines
               </h3>
               <ul className="text-sm text-gray-600 space-y-2">
-                <li className="flex items-center gap-2">
-                  <CircleCheck size={16} className="text-primary" /> Harga harus
-                  sesuai pasar
+                <li className="flex items-start gap-2">
+                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <span>
+                    Processor & GPU score dari <strong>cpubenchmark.net</strong>
+                  </span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CircleCheck size={16} className="text-primary" /> Performa
-                  gunakan benchmark
+                <li className="flex items-start gap-2">
+                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <span>Kondisi 1=buruk, 5=sempurna</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CircleCheck size={16} className="text-primary" /> Usia
-                  mempengaruhi nilai SMART
+                <li className="flex items-start gap-2">
+                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <span>Usia dalam satuan bulan</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <span>Gambar kosong = gambar lama tetap dipakai</span>
                 </li>
               </ul>
             </div>

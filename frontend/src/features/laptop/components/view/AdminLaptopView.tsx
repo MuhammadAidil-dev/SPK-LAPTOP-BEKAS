@@ -1,15 +1,27 @@
 'use client';
 
-import SummaryCard from '@/components/card/SummaryCard';
 import ButtonLink from '@/components/ui/ButtonLink';
 import { LaptopTable } from '@/components/ui/LaptopTable';
-import { dummyLaptops } from '@/constant/dummy/laptop.dummy';
-import { Plus, Wallet } from 'lucide-react';
+import { ILaptop } from '@/types/laptop.type';
+import { Plus } from 'lucide-react';
+import { useTransition } from 'react';
+import { deleteLaptopAction } from '@/features/laptop/actions/laptop.action';
 
-export default function AdminLaptopView() {
+type Props = {
+  laptops: ILaptop[];
+};
+
+export default function AdminLaptopView({ laptops }: Props) {
+  const [, startTransition] = useTransition();
+
+  const handleDelete = (id: string) => {
+    startTransition(async () => {
+      await deleteLaptopAction(id);
+    });
+  };
+
   return (
     <div className="flex flex-col">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h3 className="text-h1 text-on-surface">Recent Laptop Entries</h3>
@@ -26,33 +38,13 @@ export default function AdminLaptopView() {
       </div>
 
       <div className="border border-secondary/10 rounded-md shadow-sm">
-        {/* table */}
-        <LaptopTable laptops={dummyLaptops} />
+        <LaptopTable laptops={laptops} onDelete={handleDelete} />
 
-        {/* Footer / Pagination */}
         <div className="p-4 flex items-center justify-between bg-primary/5">
           <span className="text-sm">
-            Showing {dummyLaptops.length} of {dummyLaptops.length} laptops
+            Showing {laptops.length} laptop{laptops.length !== 1 ? 's' : ''}
           </span>
-          <div className="flex gap-2">
-            <button className="px-4 py-2 border border-secondary/50 rounded-lg text-sm font-medium">
-              Previous
-            </button>
-            <button className="px-4 py-2 border border-secondary/50 rounded-lg text-sm font-medium ">
-              Next
-            </button>
-          </div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-3 mt-8 gap-4">
-        <SummaryCard label="Total Managed" value="24 Units" />
-        <SummaryCard
-          label="Avg. Price"
-          value="Rp 18.5 Juta"
-          icon={Wallet}
-          bgIcon="secondary"
-        />
       </div>
     </div>
   );
