@@ -33,6 +33,11 @@ export const loadEnv = () => {
       EXPIRES_IN: getEnv('JWT_EXPIRES_IN'),
     },
 
+    ADMIN: {
+      ADMIN_EMAIL: getEnv('ADMIN_EMAIL'),
+      ADMIN_PASSWORD: getEnv('ADMIN_PASSWORD'),
+    },
+
     CLIENT_URL: getEnv('CLIENT_URL'),
   };
 };
