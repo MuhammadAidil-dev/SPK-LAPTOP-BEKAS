@@ -1,21 +1,18 @@
 import { Request, Response } from 'express';
 import {
   CreateCriteriaDTO,
-  ICriteria,
   ICriteriaDocument,
   ICriteriaResponse,
   UpdateCriteriaDTO,
 } from './criteria.type';
 import { criteriaService } from './criteria.service';
-import { ApiResponse } from '@/types/api-response.type';
 import { HTTP_CODE } from '@/common/error/http';
+import { sendSuccess } from '@/common/response/response.helper';
 
 class CriteriaController {
-  constructor() {}
-
   async createCriteriaController(
     _req: Request,
-    res: Response<ApiResponse<ICriteriaDocument>>,
+    res: Response,
   ) {
     const payload = res.locals.body as CreateCriteriaDTO;
 
@@ -24,8 +21,8 @@ class CriteriaController {
       name: payload.name.toLowerCase(),
     });
 
-    res.status(HTTP_CODE.CREATED).json({
-      success: true,
+    sendSuccess<ICriteriaDocument>(res, {
+      statusCode: HTTP_CODE.CREATED,
       message: 'Berhasil menambahkan criteria',
       data: criteria,
     });
@@ -33,12 +30,11 @@ class CriteriaController {
 
   async getAllCriteriaController(
     _req: Request,
-    res: Response<ApiResponse<ICriteriaResponse[]>>,
+    res: Response,
   ) {
     const allCriteria = await criteriaService.getAllCriteriaService();
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ICriteriaResponse[]>(res, {
       message: 'Berhasil mengambil data criteria',
       data: allCriteria,
     });
@@ -46,33 +42,31 @@ class CriteriaController {
 
   async updateCriteriaController(
     req: Request,
-    res: Response<ApiResponse<ICriteriaResponse>>,
+    res: Response,
   ) {
     const { id } = req.params;
     const payload = res.locals.body as UpdateCriteriaDTO;
 
-    const updateCriteria = await criteriaService.updateCriteriaService(id, {
+    const updatedCriteria = await criteriaService.updateCriteriaService(id, {
       ...payload,
       name: payload?.name?.toLowerCase(),
     });
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ICriteriaResponse>(res, {
       message: 'Berhasil update criteria',
-      data: updateCriteria,
+      data: updatedCriteria,
     });
   }
 
   async deleteCriteriaController(
     req: Request,
-    res: Response<ApiResponse<ICriteriaResponse>>,
+    res: Response,
   ) {
     const { id } = req.params;
 
     const deletedCriteria = await criteriaService.deleteCriteriaService(id);
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ICriteriaResponse>(res, {
       message: 'Berhasil menghapus criteria',
       data: deletedCriteria,
     });

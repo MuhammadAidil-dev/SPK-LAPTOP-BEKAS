@@ -22,27 +22,27 @@ class CriteriaRepository {
   }
 
   async findAll(): Promise<ICriteriaResponse[]> {
-    return await Criteria.find().lean();
+    const docs = await Criteria.find().lean();
+    return docs
+      .map((doc) => this.parseResponse(doc))
+      .filter((d): d is ICriteriaResponse => d !== null);
   }
 
   async updateCriteria(
     id: string,
     payload: UpdateCriteriaDTO,
   ): Promise<ICriteriaResponse | null> {
-    return await Criteria.findByIdAndUpdate(
+    const doc = await Criteria.findByIdAndUpdate(
       id,
-      {
-        $set: payload,
-      },
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+      { $set: payload },
+      { new: true, runValidators: true },
+    ).lean();
+    return this.parseResponse(doc);
   }
 
   async deleteCriteria(id: string): Promise<ICriteriaResponse | null> {
-    return await Criteria.findByIdAndDelete(id).lean();
+    const doc = await Criteria.findByIdAndDelete(id).lean();
+    return this.parseResponse(doc);
   }
 
   // ## HELPER ##

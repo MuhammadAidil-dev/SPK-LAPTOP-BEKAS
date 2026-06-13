@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { Document } from 'mongoose';
 
 export type TCriteriaType = 'benefit' | 'cost';
@@ -12,7 +11,7 @@ export interface ICriteria {
 
 export type ICriteriaDocument = ICriteria & Document;
 export type ICriteriaResponse = ICriteria & {
-  _id: Types.ObjectId;
+  _id: string;
   createdAt?: Date;
   updatedAt?: Date;
 };

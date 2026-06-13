@@ -1,31 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
 import { loadEnv } from '../config/env';
 import { AppError } from '@/common/error/appError';
-import { ERROR_CODE, ERROR_MESSAGE, HTTP_CODE } from '@/common/error/http';
+import { ERROR_CODE, ErrorCode, HTTP_CODE } from '@/common/error/http';
+import { sendError } from '@/common/response/response.helper';
+import { logger } from '@/config/logger';
 
 const env = loadEnv();
 
-const hasNumericCode = (error: unknown): error is { code: number } => {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'code' in error &&
-    typeof (error as { code: unknown }).code === 'number'
-  );
-};
+const hasNumericCode = (error: unknown): error is { code: number } =>
+  typeof error === 'object' &&
+  error !== null &&
+  'code' in error &&
+  typeof (error as { code: unknown }).code === 'number';
 
-const hasStack = (error: unknown): error is { stack: string } => {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'stack' in error &&
-    typeof (error as { stack: unknown }).stack === 'string'
-  );
-};
+const hasStack = (error: unknown): error is { stack: string } =>
+  typeof error === 'object' &&
+  error !== null &&
+  'stack' in error &&
+  typeof (error as { stack: unknown }).stack === 'string';
 
 export const errorMiddleware = (
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
@@ -33,35 +29,40 @@ export const errorMiddleware = (
     return next(err);
   }
 
-  let statusCode = HTTP_CODE.INTERNAL_SERVER;
-  let message = ERROR_MESSAGE.SERVER.INTERNAL_SERVER;
-  let code = ERROR_CODE.INTERNAL_SERVER;
+  let statusCode: number = HTTP_CODE.INTERNAL_SERVER;
+  let message = 'Internal Server Error';
+  let code: ErrorCode = ERROR_CODE.INTERNAL_ERROR;
 
-  // handle custom error
   if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
     code = err.code;
-  }
-
-  // Handle Mongo duplicate key error
-  if (hasNumericCode(err) && err.code === 11000) {
+  } else if (hasNumericCode(err) && err.code === 11000) {
     statusCode = HTTP_CODE.CONFLICT;
-    message = ERROR_MESSAGE.MONGO.DUPLICATE_KEY;
+    message = 'Data sudah ada, tidak boleh duplikat';
     code = ERROR_CODE.DUPLICATE_KEY;
   }
 
-  // Logging
-  if (env.NODE_ENV === 'development') {
-    console.error('ERROR:', err);
+  const logMeta = {
+    method: req.method,
+    path: req.path,
+    statusCode,
+    code,
+    ...(hasStack(err) && { stack: (err as { stack: string }).stack }),
+  };
+
+  if (statusCode >= 500) {
+    logger.error(message, logMeta);
+  } else if (statusCode >= 400) {
+    logger.warn(message, logMeta);
   }
 
-  return res.status(statusCode).json({
-    success: false,
+  sendError(res, {
+    statusCode,
     message,
     code,
-    // tampilkan stack trace hanya di development
-    ...(env.NODE_ENV === 'development' &&
-      hasStack(err) && { stack: err.stack }),
+    ...(env.NODE_ENV === 'development' && hasStack(err) && {
+      errors: { stack: (err as { stack: string }).stack },
+    }),
   });
 };
