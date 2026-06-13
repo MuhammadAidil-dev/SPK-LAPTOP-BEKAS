@@ -34,6 +34,20 @@ class AuthController {
       data: { accessToken, user },
     });
   }
+
+  async logoutController(_req: Request, res: Response) {
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: cookieOptions.httpOnly,
+      secure: cookieOptions.secure,
+      sameSite: cookieOptions.sameSite,
+      path: cookieOptions.path,
+    });
+
+    sendSuccess(res, {
+      statusCode: HTTP_CODE.OK,
+      message: 'Berhasil logout',
+    });
+  }
 }
 
 export const authController = new AuthController();

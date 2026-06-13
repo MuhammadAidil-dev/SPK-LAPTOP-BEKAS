@@ -12,4 +12,6 @@ auhtRouter.post(
   asyncHandler(authController.loginController),
 );
 
+auhtRouter.post('/logout', asyncHandler(authController.logoutController));
+
 export default auhtRouter;
