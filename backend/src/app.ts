@@ -11,12 +11,14 @@ import criteriaRouter from './modules/criteria/criteria.route';
 import laptopRouter from './modules/laptops/laptop.route';
 import calculationRouter from './modules/calculation/calculation.route';
 import uploadRouter from './modules/uploads/upload.route';
+import { httpLogger } from './middleware/httpLogger';
 
 const env = loadEnv();
 
 const app: Application = express();
 
 // Middleware
+app.use(httpLogger);
 app.use(cookieParser());
 app.use(express.json());
 app.use(
