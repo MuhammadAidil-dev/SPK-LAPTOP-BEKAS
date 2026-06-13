@@ -22,12 +22,12 @@ export default function AdminCriteriaView({ criteria }: Props) {
             </p>
           </div>
 
-          <div className="w-50">
+          {/* <div className="w-50">
             <ButtonLink href={'/criteria/add'}>
               <Plus />
               <span>Add New Criterion</span>
             </ButtonLink>
-          </div>
+          </div> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
@@ -106,7 +106,9 @@ export default function AdminCriteriaView({ criteria }: Props) {
             </p>
 
             <span className="text-xs uppercase">
-              {isValid ? 'System Integrity Active' : 'Adjust weights to continue'}
+              {isValid
+                ? 'System Integrity Active'
+                : 'Adjust weights to continue'}
             </span>
           </div>
         </div>

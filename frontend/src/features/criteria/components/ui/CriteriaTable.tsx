@@ -31,7 +31,7 @@ export default function CriteriaTable({ criteria }: Props) {
             <th className="px-6 py-4">CRITERIA</th>
             <th className="px-6 py-4">TYPE</th>
             <th className="px-6 py-4">WEIGHT</th>
-            <th className="px-6 py-4 text-right">ACTIONS</th>
+            {/* <th className="px-6 py-4 text-right">ACTIONS</th> */}
           </tr>
         </thead>
 
@@ -54,7 +54,7 @@ export default function CriteriaTable({ criteria }: Props) {
                   {item.weight.toFixed(2)}
                 </span>
               </td>
-              <td className="px-6 py-4 text-right">
+              {/* <td className="px-6 py-4 text-right">
                 <div className="flex justify-end gap-4">
                   <Link
                     href={`/criteria/edit/${item._id}`}
@@ -70,7 +70,7 @@ export default function CriteriaTable({ criteria }: Props) {
                     <Trash2 size={20} />
                   </button>
                 </div>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
