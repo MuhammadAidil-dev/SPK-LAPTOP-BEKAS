@@ -22,5 +22,11 @@ export default async function AllRankingPage() {
     image: laptops.find((l) => l._id === r.laptop_id)?.image ?? null,
   }));
 
-  return <AllRankingView rankings={rankings} />;
+  return (
+    <AllRankingView
+      rankings={rankings}
+      totalLaptops={calcResult.data.total_laptops}
+      totalCriteria={calcResult.data.total_criteria}
+    />
+  );
 }

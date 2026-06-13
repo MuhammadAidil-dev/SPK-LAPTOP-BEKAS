@@ -42,7 +42,7 @@ export default function LoginForm() {
         )}
 
         <div className="w-full mt-4">
-          <Button disabled={isPending}>
+          <Button type="submit" disabled={isPending}>
             {isPending ? 'Memproses...' : 'Login'}
           </Button>
         </div>

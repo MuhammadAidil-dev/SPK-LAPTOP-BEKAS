@@ -10,7 +10,7 @@ export default async function HomePage() {
 
   if (!calcResult.success) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-24 text-center text-gray-500">
+      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12 text-center text-gray-500">
         Belum ada data rekomendasi.
       </div>
     );
@@ -22,5 +22,11 @@ export default async function HomePage() {
     image: laptops.find((l) => l._id === r.laptop_id)?.image ?? null,
   }));
 
-  return <HomeView rankings={rankings} />;
+  return (
+    <HomeView
+      rankings={rankings}
+      totalLaptops={calcResult.data.total_laptops}
+      totalCriteria={calcResult.data.total_criteria}
+    />
+  );
 }
