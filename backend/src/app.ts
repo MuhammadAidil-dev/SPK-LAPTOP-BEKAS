@@ -42,7 +42,7 @@ app.use((_req, _res, next) => {
     new AppError(
       'Route not found',
       HTTP_CODE.NOT_FOUND,
-      ERROR_CODE.INTERNAL_SERVER,
+      ERROR_CODE.INTERNAL_ERROR,
     ),
   );
 });

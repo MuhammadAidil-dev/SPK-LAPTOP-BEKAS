@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { TLoginPayload } from './auth.type';
 import { authService } from './auth.service';
-import { ApiResponse } from '@/types/api-response.type';
 import { IUserResponse } from '../users/user.type';
 import { HTTP_CODE } from '@/common/error/http';
+import { sendSuccess } from '@/common/response/response.helper';
 
 const COOKIE_NAME = 'accessToken';
-const eightHours = 8 * 60 * 60 * 1000; // 8 jam dalam milidetik (sesuaikan dengan JWT_EXPIRES_IN)
+const eightHours = 8 * 60 * 60 * 1000;
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
@@ -21,25 +21,17 @@ type TLoginResult = {
 };
 
 class AuthController {
-  constructor() {}
-
-  async loginController(
-    _req: Request,
-    res: Response<ApiResponse<TLoginResult>>,
-  ) {
+  async loginController(_req: Request, res: Response) {
     const payload = res.locals.body as TLoginPayload;
 
     const { accessToken, user } = await authService.loginService(payload);
 
     res.cookie(COOKIE_NAME, accessToken, cookieOptions);
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
-      message: 'Berhasil Login',
-      data: {
-        accessToken,
-        user,
-      },
+    sendSuccess<TLoginResult>(res, {
+      statusCode: HTTP_CODE.OK,
+      message: 'Berhasil login',
+      data: { accessToken, user },
     });
   }
 }

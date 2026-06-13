@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { ApiResponse } from '@/types/api-response.type';
 import { HTTP_CODE } from '@/common/error/http';
+import { sendSuccess } from '@/common/response/response.helper';
 import { loadEnv } from '@/config/env';
 import { laptopService } from './laptop.service';
 import {
@@ -17,54 +17,40 @@ function buildImageUrl(file?: Express.Multer.File): string | undefined {
 }
 
 class LaptopController {
-  async createLaptopController(
-    req: Request,
-    res: Response<ApiResponse<ILaptopResponse>>,
-  ) {
+  async createLaptopController(req: Request, res: Response) {
     const payload = res.locals.body as CreateLaptopDTO;
     const laptop = await laptopService.createLaptopService({
       ...payload,
       image: buildImageUrl(req.file),
     });
 
-    res.status(HTTP_CODE.CREATED).json({
-      success: true,
+    sendSuccess<ILaptopResponse>(res, {
+      statusCode: HTTP_CODE.CREATED,
       message: 'Berhasil menambahkan laptop',
       data: laptop,
     });
   }
 
-  async getAllLaptopsController(
-    _req: Request,
-    res: Response<ApiResponse<ILaptopResponse[]>>,
-  ) {
+  async getAllLaptopsController(_req: Request, res: Response) {
     const laptops = await laptopService.getAllLaptopsService();
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ILaptopResponse[]>(res, {
       message: 'Berhasil mengambil data laptop',
       data: laptops,
     });
   }
 
-  async getLaptopByIdController(
-    req: Request,
-    res: Response<ApiResponse<ILaptopResponse>>,
-  ) {
+  async getLaptopByIdController(req: Request, res: Response) {
     const { id } = req.params;
     const laptop = await laptopService.getLaptopByIdService(id);
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ILaptopResponse>(res, {
       message: 'Berhasil mengambil data laptop',
       data: laptop,
     });
   }
 
-  async updateLaptopController(
-    req: Request,
-    res: Response<ApiResponse<ILaptopResponse>>,
-  ) {
+  async updateLaptopController(req: Request, res: Response) {
     const { id } = req.params;
     const payload = res.locals.body as UpdateLaptopDTO;
     const imageUrl = buildImageUrl(req.file);
@@ -74,22 +60,17 @@ class LaptopController {
       ...(imageUrl !== undefined && { image: imageUrl }),
     });
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ILaptopResponse>(res, {
       message: 'Berhasil memperbarui laptop',
       data: laptop,
     });
   }
 
-  async deleteLaptopController(
-    req: Request,
-    res: Response<ApiResponse<ILaptopResponse>>,
-  ) {
+  async deleteLaptopController(req: Request, res: Response) {
     const { id } = req.params;
     const laptop = await laptopService.deleteLaptopService(id);
 
-    res.status(HTTP_CODE.OK).json({
-      success: true,
+    sendSuccess<ILaptopResponse>(res, {
       message: 'Berhasil menghapus laptop',
       data: laptop,
     });

@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
 import { AppError } from '@/common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
-import { ApiResponse } from '@/types/api-response.type';
+import { sendSuccess } from '@/common/response/response.helper';
 import { loadEnv } from '@/config/env';
 
 const env = loadEnv();
 
 class UploadController {
-  uploadImageController(
-    req: Request,
-    res: Response<ApiResponse<{ url: string }>>,
-  ) {
+  uploadImageController(req: Request, res: Response) {
     if (!req.file) {
       throw new AppError(
         'File gambar tidak ditemukan',
@@ -21,8 +18,8 @@ class UploadController {
 
     const url = `${env.URL}/uploads/${req.file.filename}`;
 
-    res.status(HTTP_CODE.CREATED).json({
-      success: true,
+    sendSuccess<{ url: string }>(res, {
+      statusCode: HTTP_CODE.CREATED,
       message: 'Gambar berhasil diupload',
       data: { url },
     });

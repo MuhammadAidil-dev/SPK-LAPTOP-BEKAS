@@ -1,5 +1,6 @@
 import { AppError } from '@/common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
+import { sendError } from '@/common/response/response.helper';
 import { loadEnv } from '@/config/env';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -38,17 +39,19 @@ export const authenticate = (
     next();
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
-      res.status(HTTP_CODE.UNAUTHORIZED).json({
-        success: false,
-        message: 'Sesi telah berakhir. Silakan login kembali',
+      sendError(res, {
+        statusCode: HTTP_CODE.UNAUTHORIZED,
+        message: 'Sesi telah berakhir, silakan login kembali',
+        code: ERROR_CODE.TOKEN_EXPIRED,
       });
       return;
     }
 
     if (err instanceof jwt.JsonWebTokenError) {
-      res.status(HTTP_CODE.UNAUTHORIZED).json({
-        success: false,
+      sendError(res, {
+        statusCode: HTTP_CODE.UNAUTHORIZED,
         message: 'Token tidak valid',
+        code: ERROR_CODE.INVALID_TOKEN,
       });
       return;
     }
