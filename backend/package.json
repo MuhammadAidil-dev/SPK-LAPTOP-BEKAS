@@ -9,6 +9,7 @@
     "lint": "eslint src/**/*.ts",
     "seed": "tsx src/scripts/seed.ts",
     "seed:admin:up": "tsx src/seeders/user.seeder.ts seed",
+    "seed:admin:up:prod": "cross-env NODE_ENV=production tsx src/seeders/user.seeder.ts seed",
     "seed:admin:down": "tsx src/seeders/user.seeder.ts clear",
     "seed:criteria:up": "tsx src/seeders/criteria.seeder.ts up",
     "seed:criteria:down": "tsx src/seeders/criteria.seeder.ts down",
