@@ -72,7 +72,8 @@ temp/
 # Uploads (optional)
 # Uncomment if uploads should not be committed
 # =========================================================
-# uploads/
+uploads/*
+!uploads/.gitkeep
 
 # =========================================================
 # Docker

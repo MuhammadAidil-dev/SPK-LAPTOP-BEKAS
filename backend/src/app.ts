@@ -8,6 +8,9 @@ import auhtRouter from './modules/auth/auth.route';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
 import criteriaRouter from './modules/criteria/criteria.route';
+import laptopRouter from './modules/laptops/laptop.route';
+import calculationRouter from './modules/calculation/calculation.route';
+import uploadRouter from './modules/uploads/upload.route';
 
 const env = loadEnv();
 
@@ -23,12 +26,15 @@ app.use(
   }),
 );
 
-// middleware upload file
-// app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // route
 app.use('/api/v1/auth', auhtRouter);
 app.use('/api/v1/criteria', criteriaRouter);
+app.use('/api/v1/laptops', laptopRouter);
+app.use('/api/v1/calculation', calculationRouter);
+app.use('/api/v1/uploads', uploadRouter);
 
 // not found error
 app.use((_req, _res, next) => {
