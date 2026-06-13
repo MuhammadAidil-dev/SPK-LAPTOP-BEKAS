@@ -50,12 +50,12 @@ export default function AdminSidebar({ isOpen, onClose }: Props) {
         <span className="w-15 h-15 bg-primary rounded-md flex justify-center items-center shrink-0">
           <Laptop size={24} color="white" />
         </span>
-        <div className="flex flex-col">
+        <Link href={'/'} className="flex flex-col">
           <p className="font-bold text-black text-base">ADMIN PANEL</p>
           <p className="font-normal text-black text-xs">
             Decision Support System
           </p>
-        </div>
+        </Link>
       </div>
 
       <nav className="flex flex-col w-full mt-8 gap-4">
