@@ -117,6 +117,24 @@ Login admin. Set cookie `accessToken` (httpOnly, 8 jam).
 
 ---
 
+### POST `/auth/logout`
+
+Logout. Clear cookie `accessToken`.
+
+**Access:** Public (tidak perlu token)
+
+**Response 200:**
+```json
+{
+  "success": true,
+  "message": "Berhasil logout",
+  "data": null,
+  "meta": null
+}
+```
+
+---
+
 ## Modul: Criteria
 
 ### GET `/criteria`
