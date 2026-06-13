@@ -1,8 +1,11 @@
 import { connectDb, disconnectDB } from '@/config/db.config';
+import { loadEnv } from '@/config/env';
 import { Users } from '@/modules/users/user.model';
 import { IUser } from '@/modules/users/user.type'; // sesuaikan path jika berbeda
 
 // ─── Data seed ───────────────────────────────────────────────────────────────
+
+const env = loadEnv();
 
 interface AdminSeed {
   email: string;
@@ -12,8 +15,8 @@ interface AdminSeed {
 
 const adminSeeds: AdminSeed[] = [
   {
-    email: 'admin@laptopinhil.com',
-    password: 'admin@123456',
+    email: env.ADMIN.ADMIN_EMAIL,
+    password: env.ADMIN.ADMIN_PASSWORD,
     role: 'admin',
   },
 ];
