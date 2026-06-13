@@ -1,16 +1,32 @@
 export interface ILaptop {
-  id: string;
+  _id: string;
   name: string;
+  brand: string;
   price: number;
-  processor: string;
-  ram: string;
-  performance_score: number;
-  condition_score: number;
-  age: number;
+  processor_score: number;
+  gpu_score: number;
+  ram: number;
+  storage: number;
+  condition: number;
+  age_months: number;
+  screen_size: number;
+  battery_life: number;
+  image: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export type Result = {
-  laptop_id: string;
-  final_score: number;
-  rank: number;
+export type LaptopDTO = {
+  name: string;
+  brand: string;
+  price: number;
+  processor_score: number;
+  gpu_score: number;
+  ram: number;
+  storage: number;
+  condition: number;
+  age_months: number;
+  screen_size: number;
+  battery_life: number;
 };

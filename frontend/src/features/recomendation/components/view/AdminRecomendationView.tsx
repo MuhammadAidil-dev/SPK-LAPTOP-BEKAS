@@ -1,17 +1,18 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import RankingResultTable, { best } from '@/components/ui/RankingResultTable';
+import { ICalculationResult } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
-import { RefreshCw } from 'lucide-react';
+import Link from 'next/link';
 
-/**
- * Component
- */
-export default function AdminRecomendationView() {
+type Props = {
+  result: ICalculationResult;
+};
+
+export default function AdminRecomendationView({ result }: Props) {
+  const best = result.rankings[0];
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
-      {/* Header */}
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-3xl font-semibold text-gray-800 mb-2">
@@ -19,16 +20,8 @@ export default function AdminRecomendationView() {
           </h2>
           <p className="text-gray-500">Based on SMART calculation</p>
         </div>
-
-        <div className="w-50">
-          <Button type="button">
-            <RefreshCw />
-            <span>Recalculate</span>
-          </Button>
-        </div>
       </div>
 
-      {/* Highlight */}
       {best && (
         <div className="grid md:grid-cols-12 gap-6">
           <div className="md:col-span-8 border rounded-xl p-6 bg-white shadow-sm">
@@ -36,62 +29,114 @@ export default function AdminRecomendationView() {
               Rank #{best.rank}
             </p>
 
-            <h3 className="text-2xl font-bold mb-2">{best.laptop.name}</h3>
+            <h3 className="text-2xl font-bold mb-1">{best.name}</h3>
+            <p className="text-gray-500 text-sm mb-3">{best.brand}</p>
 
             <div className="flex gap-3 mb-4 text-sm">
               <span className="bg-gray-100 px-3 py-1 rounded">
-                IDR {formatCurrency(best.laptop.price)}
+                {formatCurrency(best.price)}
               </span>
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded font-semibold">
-                Score: {best.final_score}
+                Score: {best.final_score.toFixed(2)}
               </span>
             </div>
 
-            <p className="text-gray-500 mb-4">
-              Best laptop based on weighted SMART calculation.
-            </p>
+            <div className="space-y-3">
+              {best.criteria.map((c) => (
+                <div key={c.name}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>{c.name}</span>
+                    <span className="font-semibold">{c.utility.toFixed(1)}</span>
+                  </div>
+                  <div className="h-2 bg-gray-200 rounded">
+                    <div
+                      className="h-2 bg-primary rounded"
+                      style={{ width: `${Math.min(c.utility, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
 
-            <div className="flex gap-3">
-              <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
+            <div className="mt-6">
+              <Link
+                href={`/laptops/${best.laptop_id}`}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm inline-block"
+              >
                 Detail
-              </button>
+              </Link>
             </div>
           </div>
 
-          {/* Summary */}
           <div className="md:col-span-4 border rounded-xl p-6 bg-gray-50">
             <h4 className="font-semibold mb-4">Calculation Health</h4>
 
             <div className="space-y-4 text-sm">
               <div className="flex justify-between">
-                <span>Criteria Weight</span>
-                <span className="font-bold text-green-600">1.00</span>
-              </div>
-
-              <div className="w-full bg-gray-200 h-2 rounded">
-                <div className="bg-green-600 h-full w-full" />
+                <span>Total Laptops</span>
+                <span className="font-bold text-green-600">
+                  {result.total_laptops}
+                </span>
               </div>
 
               <div className="flex justify-between">
-                <span>Data Integrity</span>
-                <span className="font-bold text-green-600">100%</span>
-              </div>
-
-              <div className="w-full bg-gray-200 h-2 rounded">
-                <div className="bg-green-600 h-full w-full" />
+                <span>Total Criteria</span>
+                <span className="font-bold text-green-600">
+                  {result.total_criteria}
+                </span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Table */}
       <div className="bg-white border rounded-xl overflow-hidden">
         <div className="p-4 border-b flex justify-between">
           <h4 className="font-semibold text-lg">Ranking Result</h4>
         </div>
 
-        <RankingResultTable />
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-primary/10 text-black font-semibold">
+              <tr>
+                <th className="p-3 text-center w-10">Rank</th>
+                <th className="p-3 text-left">Laptop</th>
+                <th className="p-3 text-center">Price</th>
+                <th className="p-3 text-right">Score</th>
+                <th className="p-3 text-right">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {result.rankings.map((item) => (
+                <tr
+                  key={item.laptop_id}
+                  className="border-t hover:bg-secondary/5"
+                >
+                  <td className="p-3 text-center font-semibold">{item.rank}</td>
+                  <td className="p-3">
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-xs text-gray-500">{item.brand}</p>
+                  </td>
+                  <td className="p-3 text-center">
+                    {formatCurrency(item.price)}
+                  </td>
+                  <td className="p-3 text-right font-semibold text-primary">
+                    {item.final_score.toFixed(2)}
+                  </td>
+                  <td className="p-3 text-right">
+                    <Link
+                      href={`/laptops/${item.laptop_id}`}
+                      className="text-primary hover:underline text-xs"
+                    >
+                      Detail
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -3,9 +3,10 @@
 // ============================================================
 
 export interface ApiResponse<T = unknown> {
+  success: boolean;
+  message: string;
   data: T;
-  message?: string;
-  status: number;
+  meta: unknown;
 }
 
 export interface ApiError {
