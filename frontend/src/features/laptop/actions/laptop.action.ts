@@ -77,6 +77,7 @@ export async function createLaptopAction(
   revalidatePath('/laptops');
   revalidatePath('/');
   revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
   redirect('/laptops?toast=added');
 }
 
@@ -112,6 +113,7 @@ export async function updateLaptopAction(
   revalidatePath(`/laptops/${id}`);
   revalidatePath('/');
   revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
   redirect('/laptops?toast=updated');
 }
 
@@ -126,5 +128,6 @@ export async function deleteLaptopAction(
   revalidatePath('/laptops');
   revalidatePath('/');
   revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
   return null;
 }
