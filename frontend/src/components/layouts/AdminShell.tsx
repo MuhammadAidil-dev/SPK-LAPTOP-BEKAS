@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AdminSidebar from './AdminSidebar';
 import AdminTopbar from './AdminTopbar';
 
@@ -13,6 +15,7 @@ export default function AdminShell({
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={3000} />
       <AdminSidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

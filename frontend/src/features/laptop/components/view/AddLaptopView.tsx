@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useRef, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import Breadcrumbs, {
   breadcrumbItemsType,
 } from '@/components/navigations/Breadcrumb';
 import { CircleCheck, ImagePlus, X } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { createLaptopAction } from '@/features/laptop/actions/laptop.action';
 import { useLaptopAddStore } from '@/features/laptop/store/laptop-add.store';
 import Image from 'next/image';
@@ -22,10 +23,29 @@ export default function AddLaptopView() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const {
-    name, brand, price, processor_score, gpu_score,
-    ram, storage, condition, age_months, screen_size, battery_life,
+    name,
+    brand,
+    price,
+    processor_score,
+    gpu_score,
+    ram,
+    storage,
+    condition,
+    age_months,
+    screen_size,
+    battery_life,
     setField,
+    reset,
   } = useLaptopAddStore();
+
+  useEffect(() => {
+    reset();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (state?.error) toast.error(state.error);
+  }, [state]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -75,7 +95,9 @@ export default function AddLaptopView() {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Brand</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Brand
+                  </label>
                   <input
                     type="text"
                     name="brand"
@@ -295,14 +317,11 @@ export default function AddLaptopView() {
                 )}
               </div>
 
-              {state?.error && (
-                <p className="text-sm text-red-500 bg-red-50 px-4 py-2 rounded-lg">
-                  {state.error}
-                </p>
-              )}
-
               <div className="flex justify-end gap-3 pt-4 border-t">
-                <button type="button" className="px-4 py-2 border rounded-lg text-sm">
+                <button
+                  type="button"
+                  className="px-4 py-2 border rounded-lg text-sm"
+                >
                   Cancel
                 </button>
                 <button
@@ -366,22 +385,33 @@ export default function AddLaptopView() {
               </h3>
               <ul className="text-sm text-gray-600 space-y-2">
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>
-                    Processor & GPU score dari{' '}
-                    <strong>cpubenchmark.net</strong>
+                    Processor & GPU score dari <strong>cpubenchmark.net</strong>
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Kondisi 1=buruk, 5=sempurna</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Usia dalam satuan bulan (bukan tahun)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Gambar opsional, max 5MB (JPEG/PNG/WebP)</span>
                 </li>
               </ul>
