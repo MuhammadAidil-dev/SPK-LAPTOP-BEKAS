@@ -1,10 +1,13 @@
 'use client';
 
+import { recalculateAction } from '@/features/calculation/actions/calculation.action';
 import { ICalculationRanking } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
-import { ArrowRight, BarChart3, Eye, Medal, Trophy } from 'lucide-react';
+import { ArrowRight, BarChart3, Eye, Medal, RefreshCw, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 type RankedLaptop = ICalculationRanking & { image: string | null };
 
@@ -38,29 +41,50 @@ export default function AllRankingView({
 }: Props) {
   const top3 = rankings.slice(0, 3);
   const maxScore = rankings.length > 0 ? rankings[0].final_score : 1;
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function handleRecalculate() {
+    startTransition(async () => {
+      await recalculateAction();
+      router.refresh();
+    });
+  }
 
   return (
     <div className="w-full">
       {/* ── HEADER ── */}
       <section className="bg-linear-to-br from-primary/10 via-white to-white pt-24 pb-10 md:pt-28 md:pb-14">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
-              <BarChart3 size={13} />
-              Metode SMART
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-              Semua Ranking Laptop
-            </h1>
-            <p className="text-gray-500 text-sm md:text-base">
-              Daftar lengkap{' '}
-              <strong className="text-gray-700">{totalLaptops} laptop</strong>{' '}
-              diurutkan berdasarkan skor SMART yang dihitung dari{' '}
-              <strong className="text-gray-700">
-                {totalCriteria} kriteria
-              </strong>
-              .
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
+                <BarChart3 size={13} />
+                Metode SMART
+              </span>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Semua Ranking Laptop
+              </h1>
+              <p className="text-gray-500 text-sm md:text-base">
+                Daftar lengkap{' '}
+                <strong className="text-gray-700">{totalLaptops} laptop</strong>{' '}
+                diurutkan berdasarkan skor SMART yang dihitung dari{' '}
+                <strong className="text-gray-700">
+                  {totalCriteria} kriteria
+                </strong>
+                .
+              </p>
+            </div>
+            <div className="shrink-0">
+              <button
+                onClick={handleRecalculate}
+                disabled={isPending}
+                className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition"
+              >
+                <RefreshCw size={15} className={isPending ? 'animate-spin' : ''} />
+                {isPending ? 'Menghitung...' : 'Recalculate'}
+              </button>
+            </div>
           </div>
         </div>
       </section>

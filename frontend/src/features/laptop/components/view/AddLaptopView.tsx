@@ -117,7 +117,7 @@ export default function AddLaptopView() {
                 <input
                   type="number"
                   name="price"
-                  value={price}
+                  value={price || ''}
                   onChange={(e) => setField('price', Number(e.target.value))}
                   className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   placeholder="7800000"
@@ -134,7 +134,7 @@ export default function AddLaptopView() {
                   <input
                     type="number"
                     name="processor_score"
-                    value={processor_score}
+                    value={processor_score || ''}
                     onChange={(e) =>
                       setField('processor_score', Number(e.target.value))
                     }
@@ -151,7 +151,7 @@ export default function AddLaptopView() {
                   <input
                     type="number"
                     name="gpu_score"
-                    value={gpu_score}
+                    value={gpu_score || ''}
                     onChange={(e) =>
                       setField('gpu_score', Number(e.target.value))
                     }
@@ -170,7 +170,7 @@ export default function AddLaptopView() {
                   <input
                     type="number"
                     name="ram"
-                    value={ram}
+                    value={ram || ''}
                     onChange={(e) => setField('ram', Number(e.target.value))}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -183,7 +183,7 @@ export default function AddLaptopView() {
                   <input
                     type="number"
                     name="storage"
-                    value={storage}
+                    value={storage || ''}
                     onChange={(e) =>
                       setField('storage', Number(e.target.value))
                     }
@@ -198,7 +198,7 @@ export default function AddLaptopView() {
                   <input
                     type="number"
                     name="age_months"
-                    value={age_months}
+                    value={age_months || ''}
                     onChange={(e) =>
                       setField('age_months', Number(e.target.value))
                     }
@@ -214,7 +214,7 @@ export default function AddLaptopView() {
                     type="number"
                     name="screen_size"
                     step="0.1"
-                    value={screen_size}
+                    value={screen_size || ''}
                     onChange={(e) =>
                       setField('screen_size', Number(e.target.value))
                     }
@@ -232,7 +232,7 @@ export default function AddLaptopView() {
                   type="number"
                   name="battery_life"
                   step="0.5"
-                  value={battery_life}
+                  value={battery_life || ''}
                   onChange={(e) =>
                     setField('battery_life', Number(e.target.value))
                   }

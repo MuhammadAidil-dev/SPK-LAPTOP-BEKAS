@@ -1,8 +1,12 @@
 'use client';
 
+import { recalculateAction } from '@/features/calculation/actions/calculation.action';
 import { ICalculationResult } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
+import { RefreshCw } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 type Props = {
   result: ICalculationResult;
@@ -10,6 +14,15 @@ type Props = {
 
 export default function AdminRecomendationView({ result }: Props) {
   const best = result.rankings[0];
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function handleRecalculate() {
+    startTransition(async () => {
+      await recalculateAction();
+      router.refresh();
+    });
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -20,6 +33,14 @@ export default function AdminRecomendationView({ result }: Props) {
           </h2>
           <p className="text-gray-500">Based on SMART calculation</p>
         </div>
+        <button
+          onClick={handleRecalculate}
+          disabled={isPending}
+          className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed transition"
+        >
+          <RefreshCw size={15} className={isPending ? 'animate-spin' : ''} />
+          {isPending ? 'Menghitung...' : 'Recalculate'}
+        </button>
       </div>
 
       {best && (
