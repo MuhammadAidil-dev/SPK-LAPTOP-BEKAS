@@ -1,6 +1,19 @@
+import type { Metadata } from 'next';
 import AllRankingView from '@/components/view/AllRankingView';
 import { calculationService } from '@/features/calculation/services/calculation.service';
 import { laptopService } from '@/features/laptop/services/laptop.service';
+
+export const metadata: Metadata = {
+  title: 'Semua Rekomendasi Laptop Bekas',
+  description:
+    'Daftar lengkap laptop bekas dengan ranking rekomendasi berdasarkan metode SMART. Bandingkan spesifikasi dan harga laptop bekas terbaik.',
+  openGraph: {
+    title: 'Semua Rekomendasi Laptop Bekas | SPK Laptop Bekas',
+    description:
+      'Daftar lengkap laptop bekas dengan ranking rekomendasi berdasarkan metode SMART.',
+    url: 'https://laptopstore-inhil.my.id/laptops/all',
+  },
+};
 
 export default async function AllRankingPage() {
   const [calcResult, laptopsResult] = await Promise.all([

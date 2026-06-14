@@ -2,13 +2,7 @@
 
 import { ICalculationRanking } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
-import {
-  ArrowRight,
-  BarChart3,
-  Eye,
-  Medal,
-  Trophy,
-} from 'lucide-react';
+import { ArrowRight, BarChart3, Eye, Medal, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -21,9 +15,12 @@ type Props = {
 };
 
 function getRankStyle(rank: number) {
-  if (rank === 1) return { badge: 'bg-yellow-400 text-yellow-900', row: 'bg-yellow-50/60' };
-  if (rank === 2) return { badge: 'bg-gray-300 text-gray-800', row: 'bg-gray-50/60' };
-  if (rank === 3) return { badge: 'bg-amber-500/80 text-white', row: 'bg-amber-50/40' };
+  if (rank === 1)
+    return { badge: 'bg-yellow-400 text-yellow-900', row: 'bg-yellow-50/60' };
+  if (rank === 2)
+    return { badge: 'bg-gray-300 text-gray-800', row: 'bg-gray-50/60' };
+  if (rank === 3)
+    return { badge: 'bg-amber-500/80 text-white', row: 'bg-amber-50/40' };
   return { badge: 'bg-gray-100 text-gray-600', row: '' };
 }
 
@@ -34,14 +31,18 @@ function RankIcon({ rank }: { rank: number }) {
   return null;
 }
 
-export default function AllRankingView({ rankings, totalLaptops, totalCriteria }: Props) {
+export default function AllRankingView({
+  rankings,
+  totalLaptops,
+  totalCriteria,
+}: Props) {
   const top3 = rankings.slice(0, 3);
   const maxScore = rankings.length > 0 ? rankings[0].final_score : 1;
 
   return (
     <div className="w-full">
       {/* ── HEADER ── */}
-      <section className="bg-gradient-to-br from-primary/10 via-white to-white pt-24 pb-10 md:pt-28 md:pb-14">
+      <section className="bg-linear-to-br from-primary/10 via-white to-white pt-24 pb-10 md:pt-28 md:pb-14">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-4">
@@ -55,7 +56,10 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
               Daftar lengkap{' '}
               <strong className="text-gray-700">{totalLaptops} laptop</strong>{' '}
               diurutkan berdasarkan skor SMART yang dihitung dari{' '}
-              <strong className="text-gray-700">{totalCriteria} kriteria</strong>.
+              <strong className="text-gray-700">
+                {totalCriteria} kriteria
+              </strong>
+              .
             </p>
           </div>
         </div>
@@ -66,15 +70,21 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-5">
           <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-md">
             <div className="text-center">
-              <p className="text-xl md:text-2xl font-bold text-primary">{totalLaptops}</p>
+              <p className="text-xl md:text-2xl font-bold text-primary">
+                {totalLaptops}
+              </p>
               <p className="text-xs text-gray-500 mt-0.5">Laptop</p>
             </div>
             <div className="text-center border-x border-secondary/10">
-              <p className="text-xl md:text-2xl font-bold text-primary">{totalCriteria}</p>
+              <p className="text-xl md:text-2xl font-bold text-primary">
+                {totalCriteria}
+              </p>
               <p className="text-xs text-gray-500 mt-0.5">Kriteria</p>
             </div>
             <div className="text-center">
-              <p className="text-xl md:text-2xl font-bold text-primary">SMART</p>
+              <p className="text-xl md:text-2xl font-bold text-primary">
+                SMART
+              </p>
               <p className="text-xs text-gray-500 mt-0.5">Metode</p>
             </div>
           </div>
@@ -95,7 +105,11 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                 if (!item) return <div key={idx} />;
                 const podiumOrder = [2, 1, 3];
                 const rank = podiumOrder[idx];
-                const heights = ['h-52 md:h-60', 'h-64 md:h-72', 'h-52 md:h-60'];
+                const heights = [
+                  'h-52 md:h-60',
+                  'h-64 md:h-72',
+                  'h-52 md:h-60',
+                ];
                 return (
                   <PodiumCard
                     key={item.laptop_id}
@@ -111,7 +125,11 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
             {/* Mobile: vertical list */}
             <div className="sm:hidden space-y-3">
               {top3.map((item) => (
-                <MobileTopCard key={item.laptop_id} item={item} maxScore={maxScore} />
+                <MobileTopCard
+                  key={item.laptop_id}
+                  item={item}
+                  maxScore={maxScore}
+                />
               ))}
             </div>
           </section>
@@ -157,7 +175,10 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                 {rankings.map((item) => {
                   const { badge, row } = getRankStyle(item.rank);
                   return (
-                    <tr key={item.laptop_id} className={`hover:bg-gray-50 transition ${row}`}>
+                    <tr
+                      key={item.laptop_id}
+                      className={`hover:bg-gray-50 transition ${row}`}
+                    >
                       <td className="px-4 py-3.5 text-center">
                         <span
                           className={`inline-flex items-center justify-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full min-w-9 ${badge}`}
@@ -169,7 +190,7 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
 
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-3">
-                          <div className="w-14 h-10 relative bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border">
+                          <div className="w-14 h-10 relative bg-gray-100 rounded-lg overflow-hidden shrink-0 border">
                             {item.image ? (
                               <Image
                                 src={item.image}
@@ -184,8 +205,12 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                             )}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900">{item.name}</p>
-                            <p className="text-xs text-gray-400">{item.brand}</p>
+                            <p className="font-semibold text-gray-900">
+                              {item.name}
+                            </p>
+                            <p className="text-xs text-gray-400">
+                              {item.brand}
+                            </p>
                           </div>
                         </div>
                       </td>
@@ -195,7 +220,9 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                           <div className="w-28 h-2 bg-gray-100 rounded-full overflow-hidden">
                             <div
                               className="h-full bg-primary rounded-full"
-                              style={{ width: `${(item.final_score / maxScore) * 100}%` }}
+                              style={{
+                                width: `${(item.final_score / maxScore) * 100}%`,
+                              }}
                             />
                           </div>
                           <span className="font-semibold text-primary text-sm w-12 text-right tabular-nums">
@@ -234,9 +261,14 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                   className="bg-white border border-secondary/10 rounded-xl overflow-hidden shadow-sm"
                 >
                   <div className="flex gap-3 p-3.5">
-                    <div className="w-20 h-14 relative bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border">
+                    <div className="w-20 h-14 relative bg-gray-100 rounded-lg overflow-hidden shrink-0 border">
                       {item.image ? (
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
                       ) : null}
                     </div>
 
@@ -246,10 +278,9 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                           {item.name}
                         </p>
                         <span
-                          className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${badge}`}
+                          className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${badge}`}
                         >
-                          <RankIcon rank={item.rank} />
-                          #{item.rank}
+                          <RankIcon rank={item.rank} />#{item.rank}
                         </span>
                       </div>
 
@@ -260,10 +291,12 @@ export default function AllRankingView({ rankings, totalLaptops, totalCriteria }
                           <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div
                               className="h-full bg-primary rounded-full"
-                              style={{ width: `${(item.final_score / maxScore) * 100}%` }}
+                              style={{
+                                width: `${(item.final_score / maxScore) * 100}%`,
+                              }}
                             />
                           </div>
-                          <span className="text-xs font-semibold text-primary tabular-nums flex-shrink-0">
+                          <span className="text-xs font-semibold text-primary tabular-nums shrink-0">
                             {item.final_score.toFixed(3)}
                           </span>
                         </div>
@@ -316,7 +349,12 @@ function PodiumCard({
     >
       <div className={`relative ${extraHeight} bg-gray-100`}>
         {item.image ? (
-          <Image src={item.image} alt={item.name} fill className="object-cover" />
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            className="object-cover"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
             No image
@@ -325,8 +363,7 @@ function PodiumCard({
         <span
           className={`absolute top-2 left-2 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${getRankStyle(rank).badge}`}
         >
-          <RankIcon rank={rank} />
-          #{rank}
+          <RankIcon rank={rank} />#{rank}
         </span>
         {isFirst && (
           <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -356,7 +393,9 @@ function PodiumCard({
           </span>
         </div>
 
-        <p className="text-sm font-semibold text-primary">{formatCurrency(item.price)}</p>
+        <p className="text-sm font-semibold text-primary">
+          {formatCurrency(item.price)}
+        </p>
 
         <Link
           href={`/laptops/detail/${item.laptop_id}`}
@@ -380,16 +419,22 @@ function MobileTopCard({
   return (
     <div className="bg-white border-2 border-primary/20 rounded-xl overflow-hidden shadow-sm">
       <div className="flex gap-3 p-3.5">
-        <div className="w-20 h-14 relative bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+        <div className="w-20 h-14 relative bg-gray-100 rounded-lg overflow-hidden shrink-0">
           {item.image ? (
-            <Image src={item.image} alt={item.name} fill className="object-cover" />
+            <Image
+              src={item.image}
+              alt={item.name}
+              fill
+              className="object-cover"
+            />
           ) : null}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${badge}`}>
-              <RankIcon rank={item.rank} />
-              #{item.rank}
+            <span
+              className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${badge}`}
+            >
+              <RankIcon rank={item.rank} />#{item.rank}
             </span>
             {item.rank === 1 && (
               <span className="text-xs font-semibold text-yellow-600 flex items-center gap-1">
@@ -397,10 +442,14 @@ function MobileTopCard({
               </span>
             )}
           </div>
-          <p className="font-semibold text-gray-900 text-sm truncate">{item.name}</p>
+          <p className="font-semibold text-gray-900 text-sm truncate">
+            {item.name}
+          </p>
           <p className="text-xs text-gray-400 mb-2">{item.brand}</p>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-primary">{formatCurrency(item.price)}</span>
+            <span className="text-sm font-semibold text-primary">
+              {formatCurrency(item.price)}
+            </span>
             <span className="text-xs font-bold text-gray-600 tabular-nums">
               {item.final_score.toFixed(3)}
             </span>
