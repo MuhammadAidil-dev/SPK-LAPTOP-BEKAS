@@ -8,7 +8,7 @@ import { laptopService } from '../services/laptop.service';
 export type LaptopActionState = { error: string } | null;
 
 const laptopSchema = z.object({
-  name: z.string().min(3, 'Minimal 3 karakter'),
+  name: z.string().min(3, 'Nama Minimal 3 karakter'),
   brand: z.string().min(1, 'Brand wajib diisi'),
   price: z.number().min(0),
   processor_score: z.number().min(0),
@@ -24,8 +24,17 @@ const laptopSchema = z.object({
 function buildFormData(source: FormData): FormData {
   const data = new FormData();
   const fields = [
-    'name', 'brand', 'price', 'processor_score', 'gpu_score',
-    'ram', 'storage', 'condition', 'age_months', 'screen_size', 'battery_life',
+    'name',
+    'brand',
+    'price',
+    'processor_score',
+    'gpu_score',
+    'ram',
+    'storage',
+    'condition',
+    'age_months',
+    'screen_size',
+    'battery_life',
   ];
   for (const field of fields) {
     const val = source.get(field);
@@ -66,7 +75,7 @@ export async function createLaptopAction(
   }
 
   revalidatePath('/laptops');
-  redirect('/laptops');
+  redirect('/laptops?toast=added');
 }
 
 export async function updateLaptopAction(
@@ -99,7 +108,7 @@ export async function updateLaptopAction(
 
   revalidatePath('/laptops');
   revalidatePath(`/laptops/${id}`);
-  redirect('/laptops');
+  redirect('/laptops?toast=updated');
 }
 
 export async function deleteLaptopAction(
