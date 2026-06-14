@@ -1,11 +1,13 @@
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { loadEnv } from './env';
 import { logger } from './logger';
 
+dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}`, override: false });
+
 export const connectDb = async (): Promise<void> => {
-  const env = loadEnv();
+  const uri = process.env.MONGO_URI;
   try {
-    const uri = env.MONGO_URI;
     if (!uri) {
       throw new Error('MONGO_URI must be defined in environment');
     }
