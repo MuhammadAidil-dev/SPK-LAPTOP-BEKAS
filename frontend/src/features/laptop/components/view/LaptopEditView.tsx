@@ -66,7 +66,9 @@ export default function LaptopEditView({ laptop }: Props) {
           <h1 className="text-2xl font-semibold text-gray-900">
             Laptop Data Entry
           </h1>
-          <p className="text-gray-500">Edit data Laptop untuk perhitungan SMART</p>
+          <p className="text-gray-500">
+            Edit data Laptop untuk perhitungan SMART
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -75,7 +77,9 @@ export default function LaptopEditView({ laptop }: Props) {
               {/* Name + Brand */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Nama Laptop</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Nama Laptop
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -85,7 +89,9 @@ export default function LaptopEditView({ laptop }: Props) {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Brand</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Brand
+                  </label>
                   <input
                     type="text"
                     name="brand"
@@ -97,7 +103,9 @@ export default function LaptopEditView({ laptop }: Props) {
 
               {/* Price */}
               <div>
-                <label className="block font-medium mb-1 text-sm">Harga (IDR)</label>
+                <label className="block font-medium mb-1 text-sm">
+                  Harga (IDR)
+                </label>
                 <input
                   type="number"
                   name="price"
@@ -138,7 +146,9 @@ export default function LaptopEditView({ laptop }: Props) {
               {/* RAM + Storage + Age + Screen */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block font-medium mb-1 text-sm">RAM (GB)</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    RAM (GB)
+                  </label>
                   <input
                     type="number"
                     name="ram"
@@ -148,7 +158,9 @@ export default function LaptopEditView({ laptop }: Props) {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Storage (GB)</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Storage (GB)
+                  </label>
                   <input
                     type="number"
                     name="storage"
@@ -158,7 +170,9 @@ export default function LaptopEditView({ laptop }: Props) {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Usia (bulan)</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Usia (bulan)
+                  </label>
                   <input
                     type="number"
                     name="age_months"
@@ -168,7 +182,9 @@ export default function LaptopEditView({ laptop }: Props) {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-1 text-sm">Layar (inch)</label>
+                  <label className="block font-medium mb-1 text-sm">
+                    Layar (inch)
+                  </label>
                   <input
                     type="number"
                     name="screen_size"
@@ -181,7 +197,9 @@ export default function LaptopEditView({ laptop }: Props) {
 
               {/* Battery */}
               <div>
-                <label className="block font-medium mb-1 text-sm">Baterai (jam)</label>
+                <label className="block font-medium mb-1 text-sm">
+                  Baterai (jam)
+                </label>
                 <input
                   type="number"
                   name="battery_life"
@@ -193,7 +211,9 @@ export default function LaptopEditView({ laptop }: Props) {
 
               {/* Condition — visual selector */}
               <div>
-                <label className="block font-medium mb-2 text-sm">Kondisi Fisik</label>
+                <label className="block font-medium mb-2 text-sm">
+                  Kondisi Fisik
+                </label>
                 <input type="hidden" name="condition" value={condition} />
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((v) => (
@@ -288,7 +308,10 @@ export default function LaptopEditView({ laptop }: Props) {
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t">
-                <button type="button" className="px-4 py-2 border rounded-lg text-sm">
+                <button
+                  type="button"
+                  className="px-4 py-2 border rounded-lg text-sm"
+                >
                   Cancel
                 </button>
                 <button
@@ -310,21 +333,33 @@ export default function LaptopEditView({ laptop }: Props) {
               </h3>
               <ul className="text-sm text-gray-600 space-y-2">
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>
                     Processor & GPU score dari <strong>cpubenchmark.net</strong>
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Kondisi 1=buruk, 5=sempurna</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Usia dalam satuan bulan</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CircleCheck size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                  <CircleCheck
+                    size={16}
+                    className="text-primary mt-0.5 shrink-0"
+                  />
                   <span>Gambar kosong = gambar lama tetap dipakai</span>
                 </li>
               </ul>
