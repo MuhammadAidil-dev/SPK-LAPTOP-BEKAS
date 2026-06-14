@@ -12,8 +12,10 @@
     "seed:admin:up:prod": "cross-env NODE_ENV=production tsx src/seeders/user.seeder.ts seed",
     "seed:admin:down": "tsx src/seeders/user.seeder.ts clear",
     "seed:criteria:up": "tsx src/seeders/criteria.seeder.ts up",
+    "seed:criteria:up:prod": "cross-env NODE_ENV=production tsx src/seeders/criteria.seeder.ts up",
     "seed:criteria:down": "tsx src/seeders/criteria.seeder.ts down",
     "seed:laptop:up": "tsx src/seeders/laptop.seeder.ts up",
+    "seed:laptop:up:prod": "cross-env NODE_ENV=production tsx src/seeders/laptop.seeder.ts up",
     "seed:laptop:down": "tsx src/seeders/laptop.seeder.ts down"
   },
   "keywords": [],

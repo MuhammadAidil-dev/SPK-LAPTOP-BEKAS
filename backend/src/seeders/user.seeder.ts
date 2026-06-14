@@ -1,11 +1,15 @@
 import { connectDb, disconnectDB } from '@/config/db.config';
-import { loadEnv } from '@/config/env';
 import { Users } from '@/modules/users/user.model';
 import { IUser } from '@/modules/users/user.type'; // sesuaikan path jika berbeda
 
 // ─── Data seed ───────────────────────────────────────────────────────────────
 
-const env = loadEnv();
+const adminEmail = process.env.ADMIN_EMAIL;
+const adminPassword = process.env.ADMIN_PASSWORD;
+if (!adminEmail || !adminPassword) {
+  console.error('❌ ADMIN_EMAIL dan ADMIN_PASSWORD harus didefinisikan di environment');
+  process.exit(1);
+}
 
 interface AdminSeed {
   email: string;
@@ -15,8 +19,8 @@ interface AdminSeed {
 
 const adminSeeds: AdminSeed[] = [
   {
-    email: env.ADMIN.ADMIN_EMAIL,
-    password: env.ADMIN.ADMIN_PASSWORD,
+    email: adminEmail,
+    password: adminPassword,
     role: 'admin',
   },
 ];

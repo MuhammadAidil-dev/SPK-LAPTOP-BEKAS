@@ -1,9 +1,6 @@
 import { connectDb, disconnectDB } from '@/config/db.config';
-import { loadEnv } from '@/config/env';
 import { Laptop } from '@/modules/laptops/laptop.model';
 import { ILaptop } from '@/modules/laptops/laptop.type';
-
-const env = loadEnv();
 
 // Skor benchmark dari cpubenchmark.net dan videocardbenchmark.net
 type LaptopSeed = Omit<ILaptop, 'isActive'>;
@@ -301,7 +298,7 @@ const up = async (): Promise<void> => {
 // ─── Down (hanya development) ─────────────────────────────────────────────────
 
 const down = async (): Promise<void> => {
-  if (env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     throw new Error('❌ Perintah down tidak diizinkan di environment production!');
   }
 

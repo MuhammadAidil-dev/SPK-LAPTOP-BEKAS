@@ -1,9 +1,6 @@
 import { connectDb, disconnectDB } from '@/config/db.config';
-import { loadEnv } from '@/config/env';
 import { Criteria } from '@/modules/criteria/criteria.model';
 import { ICriteria } from '@/modules/criteria/criteria.type';
-
-const env = loadEnv();
 
 const criteriaSeeds: ICriteria[] = [
   {
@@ -36,7 +33,7 @@ const up = async () => {
 };
 
 const down = async () => {
-  if (env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     throw new Error(
       '❌ Perintah clear tidak diizinkan di environment production!',
     );
