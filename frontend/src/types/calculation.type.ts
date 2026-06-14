@@ -14,6 +14,7 @@ export interface ICalculationRanking {
   price: number;
   final_score: number;
   criteria: ICalculationCriteria[];
+  image?: string | null;
 }
 
 export interface ICalculationResult {

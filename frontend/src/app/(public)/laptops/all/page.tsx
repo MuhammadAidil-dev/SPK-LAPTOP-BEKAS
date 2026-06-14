@@ -19,7 +19,7 @@ export default async function AllRankingPage() {
   const laptops = laptopsResult.success ? laptopsResult.data : [];
   const rankings = calcResult.data.rankings.map((r) => ({
     ...r,
-    image: laptops.find((l) => l._id === r.laptop_id)?.image ?? null,
+    image: r.image ?? laptops.find((l) => l._id === r.laptop_id)?.image ?? null,
   }));
 
   return (
