@@ -14,7 +14,7 @@ class CalculationController {
   }
 
   async compareController(req: Request, res: Response) {
-    const { laptop_ids } = req.body;
+    const { laptop_ids } = res.locals.body;
     const result = await calculationService.compareService(laptop_ids);
 
     sendSuccess<ICalculationResult>(res, {

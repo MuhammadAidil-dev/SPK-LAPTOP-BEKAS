@@ -21,7 +21,7 @@ export const validate = (schema: ObjectSchema) => {
       );
 
       sendError(res, {
-        statusCode: HTTP_CODE.UNPROCESSABLE,
+        statusCode: HTTP_CODE.BAD_REQUEST,
         message: 'Validasi gagal',
         code: ERROR_CODE.VALIDATION_ERROR,
         errors,
