@@ -25,6 +25,16 @@ class LaptopRepository {
       .filter((d): d is ILaptopResponse => d !== null);
   }
 
+  async findByIdsAndActive(ids: string[]): Promise<ILaptopResponse[]> {
+    const docs = await Laptop.find({
+      _id: { $in: ids },
+      isActive: true,
+    }).lean();
+    return docs
+      .map((doc) => this.parseResponse(doc))
+      .filter((d): d is ILaptopResponse => d !== null);
+  }
+
   async findById(id: string): Promise<ILaptopResponse | null> {
     const doc = await Laptop.findById(id).lean();
     return this.parseResponse(doc);
