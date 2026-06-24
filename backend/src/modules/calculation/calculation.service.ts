@@ -186,6 +186,7 @@ class CalculationService {
         name: laptop.name,
         brand: laptop.brand,
         price: laptop.price,
+        image: laptop.image,
         final_score: finalScore,
         criteria: criteriaDetails,
       };

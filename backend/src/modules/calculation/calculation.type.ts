@@ -12,6 +12,7 @@ export interface ILaptopRanking {
   name: string;
   brand: string;
   price: number;
+  image?: string | null;
   final_score: number;
   criteria: ICriterionDetail[];
 }
