@@ -3,11 +3,27 @@
 import { recalculateAction } from '@/features/calculation/actions/calculation.action';
 import { ICalculationRanking } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
-import { ArrowRight, BarChart3, Eye, Medal, RefreshCw, Trophy } from 'lucide-react';
+import {
+  addToCompare,
+  getCompareIds,
+  removeFromCompare,
+} from '@/lib/compare-storage';
+import {
+  ArrowRight,
+  BarChart3,
+  CheckSquare,
+  Eye,
+  Medal,
+  RefreshCw,
+  Scale,
+  Square,
+  Trophy,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 type RankedLaptop = ICalculationRanking & { image: string | null };
 
@@ -43,6 +59,22 @@ export default function AllRankingView({
   const maxScore = rankings.length > 0 ? rankings[0].final_score : 1;
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCompareIds(getCompareIds());
+  }, []);
+
+  function toggleCompare(laptopId: string) {
+    setCompareIds((prev) => {
+      if (prev.includes(laptopId)) {
+        removeFromCompare(laptopId);
+        return prev.filter((id) => id !== laptopId);
+      }
+      addToCompare(laptopId);
+      return [...prev, laptopId];
+    });
+  }
 
   function handleRecalculate() {
     startTransition(async () => {
@@ -141,6 +173,8 @@ export default function AllRankingView({
                     rank={rank}
                     extraHeight={heights[idx]}
                     maxScore={maxScore}
+                    compareIds={compareIds}
+                    onToggleCompare={toggleCompare}
                   />
                 );
               })}
@@ -152,7 +186,8 @@ export default function AllRankingView({
                 <MobileTopCard
                   key={item.laptop_id}
                   item={item}
-                  maxScore={maxScore}
+                  compareIds={compareIds}
+                  onToggleCompare={toggleCompare}
                 />
               ))}
             </div>
@@ -188,6 +223,9 @@ export default function AllRankingView({
                   </th>
                   <th className="px-4 py-3.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">
                     Harga
+                  </th>
+                  <th className="px-4 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide w-20">
+                    Banding
                   </th>
                   <th className="px-4 py-3.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide w-24">
                     Detail
@@ -260,6 +298,22 @@ export default function AllRankingView({
                       </td>
 
                       <td className="px-4 py-3.5 text-center">
+                        <button
+                          onClick={() => toggleCompare(item.laptop_id)}
+                          className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
+                            compareIds.includes(item.laptop_id)
+                              ? 'bg-primary text-white'
+                              : 'border border-gray-300 text-gray-500 hover:border-primary hover:text-primary'
+                          }`}
+                        >
+                          {compareIds.includes(item.laptop_id) ? (
+                            <CheckSquare size={13} />
+                          ) : (
+                            <Square size={13} />
+                          )}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3.5 text-center">
                         <Link
                           href={`/laptops/detail/${item.laptop_id}`}
                           className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary border border-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-lg transition"
@@ -330,12 +384,29 @@ export default function AllRankingView({
                         <span className="text-sm font-semibold text-gray-700">
                           {formatCurrency(item.price)}
                         </span>
-                        <Link
-                          href={`/laptops/detail/${item.laptop_id}`}
-                          className="flex items-center gap-1 text-xs font-semibold text-primary"
-                        >
-                          Detail <ArrowRight size={12} />
-                        </Link>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => toggleCompare(item.laptop_id)}
+                            className={`flex items-center gap-1 text-xs font-semibold transition ${
+                              compareIds.includes(item.laptop_id)
+                                ? 'text-primary'
+                                : 'text-gray-400 hover:text-primary'
+                            }`}
+                          >
+                            {compareIds.includes(item.laptop_id) ? (
+                              <CheckSquare size={13} />
+                            ) : (
+                              <Square size={13} />
+                            )}
+                            Banding
+                          </button>
+                          <Link
+                            href={`/laptops/detail/${item.laptop_id}`}
+                            className="flex items-center gap-1 text-xs font-semibold text-primary"
+                          >
+                            Detail <ArrowRight size={12} />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -345,6 +416,38 @@ export default function AllRankingView({
           </div>
         </section>
       </div>
+
+      {/* ── FLOATING COMPARE BAR ── */}
+      {compareIds.length > 0 && (
+        <div className="fixed bottom-0 inset-x-0 bg-white border-t border-secondary/20 shadow-lg z-40">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Scale size={18} className="text-primary" />
+              <span>
+                <strong className="text-gray-900">{compareIds.length}</strong>{' '}
+                laptop dipilih
+              </span>
+              <button
+                onClick={() => {
+                  compareIds.forEach(removeFromCompare);
+                  setCompareIds([]);
+                }}
+                className="ml-2 text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1"
+              >
+                <X size={13} />
+                Hapus semua
+              </button>
+            </div>
+            <Link
+              href="/laptops/compare"
+              className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition"
+            >
+              <Scale size={15} />
+              Bandingkan
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -354,11 +457,15 @@ function PodiumCard({
   rank,
   extraHeight,
   maxScore,
+  compareIds,
+  onToggleCompare,
 }: {
   item: RankedLaptop;
   rank: number;
   extraHeight: string;
   maxScore: number;
+  compareIds: string[];
+  onToggleCompare: (id: string) => void;
 }) {
   const isFirst = rank === 1;
   const borderColor = isFirst
@@ -421,6 +528,22 @@ function PodiumCard({
           {formatCurrency(item.price)}
         </p>
 
+        <button
+          onClick={() => onToggleCompare(item.laptop_id)}
+          className={`flex items-center justify-center gap-1.5 w-full font-semibold py-2 rounded-lg transition text-xs ${
+            compareIds.includes(item.laptop_id)
+              ? 'bg-primary text-white'
+              : 'border border-gray-300 text-gray-500 hover:border-primary hover:text-primary'
+          }`}
+        >
+          {compareIds.includes(item.laptop_id) ? (
+            <CheckSquare size={13} />
+          ) : (
+            <Square size={13} />
+          )}
+          {compareIds.includes(item.laptop_id) ? 'Terpilih' : 'Bandingkan'}
+        </button>
+
         <Link
           href={`/laptops/detail/${item.laptop_id}`}
           className="mt-auto flex items-center justify-center gap-1.5 w-full border border-primary text-primary hover:bg-primary hover:text-white font-semibold py-2 rounded-lg transition text-xs"
@@ -434,10 +557,12 @@ function PodiumCard({
 
 function MobileTopCard({
   item,
-  maxScore,
+  compareIds,
+  onToggleCompare,
 }: {
   item: RankedLaptop;
-  maxScore: number;
+  compareIds: string[];
+  onToggleCompare: (id: string) => void;
 }) {
   const { badge } = getRankStyle(item.rank);
   return (
@@ -478,6 +603,21 @@ function MobileTopCard({
               {item.final_score.toFixed(3)}
             </span>
           </div>
+          <button
+            onClick={() => onToggleCompare(item.laptop_id)}
+            className={`mt-2 flex items-center justify-center gap-1.5 w-full font-semibold py-1.5 rounded-lg transition text-xs ${
+              compareIds.includes(item.laptop_id)
+                ? 'bg-primary/10 text-primary'
+                : 'border border-gray-300 text-gray-500 hover:border-primary hover:text-primary'
+            }`}
+          >
+            {compareIds.includes(item.laptop_id) ? (
+              <CheckSquare size={12} />
+            ) : (
+              <Square size={12} />
+            )}
+            {compareIds.includes(item.laptop_id) ? 'Terpilih' : 'Bandingkan'}
+          </button>
         </div>
       </div>
     </div>
