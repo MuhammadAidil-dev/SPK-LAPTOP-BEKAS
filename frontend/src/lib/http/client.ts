@@ -1,30 +1,21 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { cookies } from 'next/headers';
 import { normalizeError } from './error';
 import { ApiResponse, ApiError, Result } from './types';
 import { loadEnvPublic } from '@/constant/env.constan';
 
 const ENV_PUBLIC = loadEnvPublic();
-
 const BASE_URL = ENV_PUBLIC.BASE_URL;
-const TOKEN_COOKIE_KEY = 'accessToken';
 
-// ────────────────────────────────────────────────
-// Factory: buat instance dengan/tanpa token
-// ────────────────────────────────────────────────
-
-function createInstance(withToken: boolean): AxiosInstance {
+function createInstance(tokenGetter?: () => Promise<string | undefined>): AxiosInstance {
   const instance = axios.create({
     baseURL: BASE_URL,
     timeout: 15_000,
     headers: { 'Content-Type': 'application/json' },
   });
 
-  // Request interceptor — inject token jika diperlukan
   instance.interceptors.request.use(async (config) => {
-    if (withToken) {
-      const cookieStore = await cookies();
-      const token = cookieStore.get(TOKEN_COOKIE_KEY)?.value;
+    if (tokenGetter) {
+      const token = await tokenGetter();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -38,24 +29,16 @@ function createInstance(withToken: boolean): AxiosInstance {
   return instance;
 }
 
-// Instance publik (tanpa token) & privat (dengan token)
-const publicInstance = createInstance(false);
-const privateInstance = createInstance(true);
-
-// ────────────────────────────────────────────────
-// Native fetch — untuk FormData multipart (Axios tidak
-// bisa serialize Web File di Node.js dengan benar)
-// ────────────────────────────────────────────────
+const publicInstance = createInstance();
 
 async function formDataRequest<T>(
   method: string,
   url: string,
   data: FormData,
+  tokenGetter?: () => Promise<string | undefined>,
 ): Promise<Result<T>> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get(TOKEN_COOKIE_KEY)?.value;
-
+    const token = tokenGetter ? await tokenGetter() : undefined;
     const headers: HeadersInit = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
@@ -73,10 +56,6 @@ async function formDataRequest<T>(
   }
 }
 
-// ────────────────────────────────────────────────
-// Generic request handler — mengembalikan Result<T>
-// ────────────────────────────────────────────────
-
 async function request<T>(
   instance: AxiosInstance,
   config: AxiosRequestConfig,
@@ -89,10 +68,6 @@ async function request<T>(
   }
 }
 
-// ────────────────────────────────────────────────
-// Public API — tanpa token (untuk endpoint publik)
-// ────────────────────────────────────────────────
-
 export const publicApi = {
   get: <T>(url: string, config?: AxiosRequestConfig) =>
     request<T>(publicInstance, { ...config, method: 'GET', url }),
@@ -101,29 +76,4 @@ export const publicApi = {
     request<T>(publicInstance, { ...config, method: 'POST', url, data }),
 };
 
-// ────────────────────────────────────────────────
-// Private API — dengan token dari cookies
-// ────────────────────────────────────────────────
-
-export const privateApi = {
-  get: <T>(url: string, config?: AxiosRequestConfig) =>
-    request<T>(privateInstance, { ...config, method: 'GET', url }),
-
-  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-    request<T>(privateInstance, { ...config, method: 'POST', url, data }),
-
-  postFormData: <T>(url: string, data: FormData) =>
-    formDataRequest<T>('POST', url, data),
-
-  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-    request<T>(privateInstance, { ...config, method: 'PUT', url, data }),
-
-  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-    request<T>(privateInstance, { ...config, method: 'PATCH', url, data }),
-
-  patchFormData: <T>(url: string, data: FormData) =>
-    formDataRequest<T>('PATCH', url, data),
-
-  delete: <T>(url: string, config?: AxiosRequestConfig) =>
-    request<T>(privateInstance, { ...config, method: 'DELETE', url }),
-};
+export { createInstance, formDataRequest, request, BASE_URL };

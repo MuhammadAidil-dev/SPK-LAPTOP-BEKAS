@@ -1,4 +1,5 @@
-import { privateApi, publicApi } from '@/lib/http/client';
+import { publicApi } from '@/lib/http/client';
+import { privateApi } from '@/lib/http/client-server';
 import { ICriteria } from '@/types/criteria.type';
 
 export type CriteriaCreatePayload = { name: string; type: 'benefit' | 'cost'; weight: number };

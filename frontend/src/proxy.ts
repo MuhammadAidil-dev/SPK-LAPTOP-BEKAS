@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const PROTECTED = ['/dashboard', '/laptops', '/criteria', '/recomendations'];
 
-const LAPTOPS_PUBLIC = ['/laptops/all', '/laptops/detail'];
+const LAPTOPS_PUBLIC = ['/laptops/all', '/laptops/detail', '/laptops/compare'];
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get('accessToken')?.value;

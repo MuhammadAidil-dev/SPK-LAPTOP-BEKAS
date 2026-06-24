@@ -1,6 +1,7 @@
 import { AppError } from '@/common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
 import { criteriaRepository } from '@/modules/criteria/criteria.repository';
+import { ICriteriaResponse } from '@/modules/criteria/criteria.type';
 import { laptopRepository } from '@/modules/laptops/laptop.repository';
 import { ILaptopResponse } from '@/modules/laptops/laptop.type';
 import { ICalculationResult, ICriterionDetail } from './calculation.type';
@@ -102,6 +103,49 @@ class CalculationService {
       );
     }
 
+    return this._performCalculation(laptops, activeCriteria);
+  }
+
+  async compareService(laptopIds: string[]): Promise<ICalculationResult> {
+    // De-duplicate IDs
+    const uniqueIds = [...new Set(laptopIds)];
+
+    // Fetch criteria and selected laptops
+    const [allCriteria, selectedLaptops] = await Promise.all([
+      criteriaRepository.findAll(),
+      laptopRepository.findByIdsAndActive(uniqueIds),
+    ]);
+
+    const activeCriteria = allCriteria.filter((c) => c.isActive === true);
+
+    // Validate: no active criteria
+    if (activeCriteria.length === 0) {
+      throw new AppError(
+        'Tidak ada kriteria aktif untuk perhitungan',
+        HTTP_CODE.BAD_REQUEST,
+        ERROR_CODE.BAD_REQUEST,
+      );
+    }
+
+    // Validate: check if all requested IDs are found
+    if (selectedLaptops.length < uniqueIds.length) {
+      const foundIds = selectedLaptops.map((l) => String(l._id));
+      const notFoundIds = uniqueIds.filter((id) => !foundIds.includes(id));
+      throw new AppError(
+        `Laptop dengan ID ${notFoundIds.join(', ')} tidak ditemukan atau tidak aktif`,
+        HTTP_CODE.NOT_FOUND,
+        ERROR_CODE.NOT_FOUND,
+      );
+    }
+
+    // Perform calculation with selected laptops only
+    return this._performCalculation(selectedLaptops, activeCriteria);
+  }
+
+  private _performCalculation(
+    laptops: ILaptopResponse[],
+    activeCriteria: ICriteriaResponse[],
+  ): ICalculationResult {
     // Normalize weights so they sum to 1
     const totalWeight = activeCriteria.reduce((sum, c) => sum + c.weight, 0);
     const normalizedCriteria = activeCriteria.map((c) => ({

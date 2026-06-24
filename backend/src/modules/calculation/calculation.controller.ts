@@ -12,6 +12,16 @@ class CalculationController {
       data: result,
     });
   }
+
+  async compareController(req: Request, res: Response) {
+    const { laptop_ids } = res.locals.body;
+    const result = await calculationService.compareService(laptop_ids);
+
+    sendSuccess<ICalculationResult>(res, {
+      message: 'Perhitungan SMART perbandingan berhasil',
+      data: result,
+    });
+  }
 }
 
 export const calculationController = new CalculationController();

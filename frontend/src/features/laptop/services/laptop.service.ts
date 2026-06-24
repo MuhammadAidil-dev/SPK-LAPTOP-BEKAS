@@ -1,4 +1,5 @@
-import { privateApi, publicApi } from '@/lib/http/client';
+import { publicApi } from '@/lib/http/client';
+import { privateApi } from '@/lib/http/client-server';
 import { ILaptop } from '@/types/laptop.type';
 
 export const laptopService = {

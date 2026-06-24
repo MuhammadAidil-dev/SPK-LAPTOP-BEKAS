@@ -3,18 +3,26 @@
 import { ICalculationRanking } from '@/types/calculation.type';
 import { formatCurrency } from '@/utils/utils';
 import {
+  addToCompare,
+  getCompareIds,
+  removeFromCompare,
+} from '@/lib/compare-storage';
+import {
   ArrowRight,
   BarChart3,
   CheckCircle,
+  CheckSquare,
   Cpu,
   DollarSign,
   Medal,
   Shield,
+  Square,
   Trophy,
   Wrench,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 type RankedLaptop = ICalculationRanking & { image: string | null };
 
@@ -45,6 +53,22 @@ export default function HomeView({
   totalCriteria,
 }: Props) {
   const [top1, ...others] = [...rankings].sort((a, b) => a.rank - b.rank);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCompareIds(getCompareIds());
+  }, []);
+
+  function toggleCompare(laptopId: string) {
+    setCompareIds((prev) => {
+      if (prev.includes(laptopId)) {
+        removeFromCompare(laptopId);
+        return prev.filter((id) => id !== laptopId);
+      }
+      addToCompare(laptopId);
+      return [...prev, laptopId];
+    });
+  }
 
   if (!top1) {
     return (
@@ -245,20 +269,39 @@ export default function HomeView({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-4">
-                  <div className="bg-primary/10 rounded-lg px-4 py-2 text-center">
-                    <p className="text-xs text-gray-500">SMART Score</p>
-                    <p className="text-lg font-bold text-primary">
-                      {top1.final_score.toFixed(2)}
-                    </p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="bg-primary/10 rounded-lg px-4 py-2 text-center">
+                        <p className="text-xs text-gray-500">SMART Score</p>
+                        <p className="text-lg font-bold text-primary">
+                          {top1.final_score.toFixed(2)}
+                        </p>
+                      </div>
+                      <Link
+                        href={`/laptops/detail/${top1.laptop_id}`}
+                        className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-hover text-white font-semibold py-2.5 rounded-lg transition text-sm"
+                      >
+                        Lihat Detail <ArrowRight size={15} />
+                      </Link>
+                    </div>
+                    <button
+                      onClick={() => toggleCompare(top1.laptop_id)}
+                      className={`flex items-center justify-center gap-1.5 w-full font-semibold py-2 rounded-lg transition text-sm ${
+                        compareIds.includes(top1.laptop_id)
+                          ? 'bg-primary/10 text-primary border border-primary/20'
+                          : 'border border-gray-300 text-gray-500 hover:border-primary hover:text-primary'
+                      }`}
+                    >
+                      {compareIds.includes(top1.laptop_id) ? (
+                        <CheckSquare size={15} />
+                      ) : (
+                        <Square size={15} />
+                      )}
+                      {compareIds.includes(top1.laptop_id)
+                        ? 'Terpilih untuk Dibandingkan'
+                        : 'Bandingkan'}
+                    </button>
                   </div>
-                  <Link
-                    href={`/laptops/detail/${top1.laptop_id}`}
-                    className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-hover text-white font-semibold py-2.5 rounded-lg transition text-sm"
-                  >
-                    Lihat Detail <ArrowRight size={15} />
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
@@ -310,6 +353,21 @@ export default function HomeView({
                   >
                     Lihat Detail
                   </Link>
+                  <button
+                    onClick={() => toggleCompare(item.laptop_id)}
+                    className={`flex items-center justify-center gap-1.5 w-full font-semibold py-2 rounded-lg transition text-sm ${
+                      compareIds.includes(item.laptop_id)
+                        ? 'bg-primary/10 text-primary border border-primary/20'
+                        : 'border border-gray-300 text-gray-500 hover:border-primary hover:text-primary'
+                    }`}
+                  >
+                    {compareIds.includes(item.laptop_id) ? (
+                      <CheckSquare size={14} />
+                    ) : (
+                      <Square size={14} />
+                    )}
+                    {compareIds.includes(item.laptop_id) ? 'Terpilih' : 'Bandingkan'}
+                  </button>
                 </div>
               </div>
             ))}
