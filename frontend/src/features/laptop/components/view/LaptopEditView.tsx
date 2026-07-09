@@ -16,6 +16,7 @@ const breadcrumbItems: breadcrumbItemsType[] = [
 ];
 
 const conditionLabels = ['Buruk', 'Kurang', 'Cukup', 'Baik', 'Sempurna'];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 type Props = {
   laptop: ILaptop;
@@ -41,6 +42,11 @@ export default function LaptopEditView({ laptop }: Props) {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.error('Ukuran gambar maksimal 5MB');
+      if (fileRef.current) fileRef.current.value = '';
+      return;
+    }
     if (typeof imagePreview === 'string' && imagePreview.startsWith('blob:')) {
       URL.revokeObjectURL(imagePreview);
     }

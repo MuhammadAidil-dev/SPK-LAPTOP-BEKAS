@@ -16,6 +16,7 @@ const breadcrumbItems: breadcrumbItemsType[] = [
 ];
 
 const conditionLabels = ['Buruk', 'Kurang', 'Cukup', 'Baik', 'Sempurna'];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
 export default function AddLaptopView() {
   const [state, action, isPending] = useActionState(createLaptopAction, null);
@@ -50,6 +51,11 @@ export default function AddLaptopView() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.error('Ukuran gambar maksimal 5MB');
+      if (fileRef.current) fileRef.current.value = '';
+      return;
+    }
     if (imagePreview) URL.revokeObjectURL(imagePreview);
     setImagePreview(URL.createObjectURL(file));
   };
