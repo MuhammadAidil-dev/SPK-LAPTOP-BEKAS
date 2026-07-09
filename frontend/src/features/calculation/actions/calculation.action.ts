@@ -6,4 +6,5 @@ export async function recalculateAction() {
   revalidatePath('/recomendations');
   revalidatePath('/laptops/all');
   revalidatePath('/');
+  revalidatePath('/dashboard');
 }

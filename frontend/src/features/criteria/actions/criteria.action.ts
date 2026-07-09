@@ -33,6 +33,11 @@ export async function createCriteriaAction(
   }
 
   revalidatePath('/criteria');
+  revalidatePath('/dashboard');
+  revalidatePath('/');
+  revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
+  revalidatePath('/laptops/detail/[id]', 'page');
   redirect('/criteria');
 }
 
@@ -57,6 +62,11 @@ export async function updateCriteriaAction(
   }
 
   revalidatePath('/criteria');
+  revalidatePath('/dashboard');
+  revalidatePath('/');
+  revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
+  revalidatePath('/laptops/detail/[id]', 'page');
   redirect('/criteria');
 }
 
@@ -69,5 +79,10 @@ export async function deleteCriteriaAction(
   }
 
   revalidatePath('/criteria');
+  revalidatePath('/dashboard');
+  revalidatePath('/');
+  revalidatePath('/laptops/all');
+  revalidatePath('/recomendations');
+  revalidatePath('/laptops/detail/[id]', 'page');
   return null;
 }

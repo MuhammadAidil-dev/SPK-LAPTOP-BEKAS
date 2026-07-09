@@ -1,3 +1,4 @@
+import CompareFloatingBar from '@/components/layouts/CompareFloatingBar';
 import Footer from '@/components/layouts/Footer';
 import Navbar from '@/components/layouts/Navbar';
 
@@ -11,6 +12,7 @@ export default function PublicLayout({
       <Navbar />
       <main className="min-h-screen flex flex-col">{children}</main>
       <Footer />
+      <CompareFloatingBar />
     </>
   );
 }
