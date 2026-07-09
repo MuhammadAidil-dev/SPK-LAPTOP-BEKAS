@@ -13,12 +13,13 @@ import { formatCurrency } from '@/utils/utils';
 export default function CompareResultView() {
   const router = useRouter();
   const [result, setResult] = useState<ICalculationResult | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => getCompareIds().length > 0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     const ids = getCompareIds();
+    if (ids.length === 0) return;
 
     calculationService.compare(ids).then((res) => {
       if (cancelled) return;

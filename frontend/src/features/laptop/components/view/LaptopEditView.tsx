@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import Breadcrumbs, {
   breadcrumbItemsType,
 } from '@/components/navigations/Breadcrumb';
-import { CircleCheck, ImagePlus, X } from 'lucide-react';
+import { CircleCheck, ImagePlus } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { ILaptop } from '@/types/laptop.type';
 import { updateLaptopAction } from '@/features/laptop/actions/laptop.action';
@@ -31,11 +31,10 @@ export default function LaptopEditView({ laptop }: Props) {
   }, [state]);
 
   const [condition, setCondition] = useState(laptop.condition);
-  // null  = pakai gambar lama (tidak ganti)
-  // false = user hapus gambar lama, tidak upload baru
+  // null = pakai gambar lama (tidak ganti)
   // string = blob URL gambar baru yang dipilih
-  const [imagePreview, setImagePreview] = useState<string | null | false>(
-    laptop.image ?? false,
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    laptop.image ?? null,
   );
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -47,18 +46,10 @@ export default function LaptopEditView({ laptop }: Props) {
       if (fileRef.current) fileRef.current.value = '';
       return;
     }
-    if (typeof imagePreview === 'string' && imagePreview.startsWith('blob:')) {
+    if (imagePreview?.startsWith('blob:')) {
       URL.revokeObjectURL(imagePreview);
     }
     setImagePreview(URL.createObjectURL(file));
-  };
-
-  const clearImage = () => {
-    if (typeof imagePreview === 'string' && imagePreview.startsWith('blob:')) {
-      URL.revokeObjectURL(imagePreview);
-    }
-    setImagePreview(false);
-    if (fileRef.current) fileRef.current.value = '';
   };
 
   const hasImage = typeof imagePreview === 'string' && imagePreview.length > 0;
@@ -268,32 +259,19 @@ export default function LaptopEditView({ laptop }: Props) {
                       alt="Preview"
                       fill
                       className="object-contain"
-                      unoptimized={
-                        typeof imagePreview === 'string' &&
-                        imagePreview.startsWith('blob:')
-                      }
+                      unoptimized={imagePreview?.startsWith('blob:')}
                     />
 
-                    <div className="absolute top-2 right-2 flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => fileRef.current?.click()}
-                        className="bg-white border border-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-gray-50 shadow-sm"
-                      >
-                        Ganti
-                      </button>
-                      <button
-                        type="button"
-                        onClick={clearImage}
-                        className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-sm"
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => fileRef.current?.click()}
+                      className="absolute top-2 right-2 bg-white border border-gray-200 text-gray-700 rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-gray-50 shadow-sm"
+                    >
+                      Ganti
+                    </button>
 
                     <span className="absolute bottom-2 left-2 text-xs bg-black/50 text-white px-2 py-0.5 rounded-full">
-                      {typeof imagePreview === 'string' &&
-                      imagePreview.startsWith('blob:')
+                      {imagePreview?.startsWith('blob:')
                         ? 'Gambar baru'
                         : 'Gambar saat ini'}
                     </span>
@@ -305,9 +283,7 @@ export default function LaptopEditView({ laptop }: Props) {
                   >
                     <ImagePlus size={24} className="text-gray-400 mb-2" />
                     <span className="text-sm text-gray-400">
-                      {laptop.image
-                        ? 'Gambar dihapus — klik untuk upload baru'
-                        : 'Klik untuk upload gambar'}
+                      Klik untuk upload gambar
                     </span>
                   </div>
                 )}

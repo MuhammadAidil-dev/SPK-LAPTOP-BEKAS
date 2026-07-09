@@ -32,6 +32,7 @@ export async function loginAction(
     maxAge: 60 * 60 * 8,
     path: '/',
     sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   });
 
   redirect('/dashboard');
