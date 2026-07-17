@@ -16,7 +16,11 @@
     "seed:criteria:down": "tsx src/seeders/criteria.seeder.ts down",
     "seed:laptop:up": "tsx src/seeders/laptop.seeder.ts up",
     "seed:laptop:up:prod": "cross-env NODE_ENV=production tsx src/seeders/laptop.seeder.ts up",
-    "seed:laptop:down": "tsx src/seeders/laptop.seeder.ts down"
+    "seed:laptop:down": "tsx src/seeders/laptop.seeder.ts down",
+    "fix:laptop-scores": "tsx src/seeders/laptop-fix-scores.seeder.ts",
+    "fix:laptop-scores:apply": "tsx src/seeders/laptop-fix-scores.seeder.ts --apply",
+    "fix:laptop-scores:prod": "cross-env NODE_ENV=production tsx src/seeders/laptop-fix-scores.seeder.ts",
+    "fix:laptop-scores:apply:prod": "cross-env NODE_ENV=production tsx src/seeders/laptop-fix-scores.seeder.ts --apply"
   },
   "keywords": [],
   "author": "",
