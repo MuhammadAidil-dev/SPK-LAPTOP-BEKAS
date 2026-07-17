@@ -106,6 +106,8 @@ export default function LaptopEditView({ laptop }: Props) {
                 <input
                   type="number"
                   name="price"
+                  min={0}
+                  step={1}
                   defaultValue={laptop.price}
                   className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                 />
@@ -121,6 +123,8 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="processor_score"
+                    min={0}
+                    step={1}
                     defaultValue={laptop.processor_score}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -134,6 +138,8 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="gpu_score"
+                    min={0}
+                    step={1}
                     defaultValue={laptop.gpu_score}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -149,6 +155,8 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="ram"
+                    min={0}
+                    step={1}
                     defaultValue={laptop.ram}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -161,6 +169,8 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="storage"
+                    min={0}
+                    step={1}
                     defaultValue={laptop.storage}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -173,6 +183,8 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="age_months"
+                    min={0}
+                    step={1}
                     defaultValue={laptop.age_months}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
                   />
@@ -185,6 +197,7 @@ export default function LaptopEditView({ laptop }: Props) {
                   <input
                     type="number"
                     name="screen_size"
+                    min={0}
                     step="0.1"
                     defaultValue={laptop.screen_size}
                     className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
@@ -200,6 +213,7 @@ export default function LaptopEditView({ laptop }: Props) {
                 <input
                   type="number"
                   name="battery_life"
+                  min={0}
                   step="0.5"
                   defaultValue={laptop.battery_life}
                   className="w-40 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 outline-none text-sm"
